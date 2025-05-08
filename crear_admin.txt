@@ -1,0 +1,22 @@
+<?php
+include 'includes/conexion.php';
+
+$nombre = 'Administrador';
+$correo = 'admin@gmail.com';
+$contrasena = 'admin123'; // o cámbiala aquí
+$hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
+$rol = 'admin';
+
+try {
+    $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, correo, contrasena, rol) VALUES (:nombre, :correo, :contrasena, :rol)");
+    $stmt->execute([
+        'nombre' => $nombre,
+        'correo' => $correo,
+        'contrasena' => $hashed_password,
+        'rol' => $rol
+    ]);
+    echo "Administrador creado con éxito.";
+} catch (PDOException $e) {
+    echo "Error al crear el administrador: " . $e->getMessage();
+}
+?>

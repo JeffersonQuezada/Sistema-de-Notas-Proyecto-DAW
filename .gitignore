@@ -1,0 +1,24 @@
+# Ignorar archivos de entorno
+.env
+
+# Ignorar archivos de IDE
+.idea/
+.vscode/
+
+# Ignorar archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar dependencias de Composer
+/vendor/
+
+# Ignorar archivos de sesión y caché
+/sessions/
+/tmp/
+
+# Ignorar archivos de configuración sensible
+/config.php
+/database_credentials.php
+
+# Ignorar archivos subidos por usuarios
+/uploads/

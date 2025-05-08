@@ -1,0 +1,12 @@
+Options -Indexes
+RewriteEngine On
+RewriteBase /proyectodaw2025/admin/
+
+# Redirigir si se accede a una URL con rutas duplicadas
+RewriteCond %{REQUEST_URI} ^(.*?)(\/[^\/]+\/)(\2)+ [NC]
+RewriteRule ^ %1%2 [L,R=301]
+
+# Redirigir todas las solicitudes al index principal si el archivo no existe
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
