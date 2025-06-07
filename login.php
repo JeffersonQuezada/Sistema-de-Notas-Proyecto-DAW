@@ -51,10 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             header("Location: admin/dashboard.php");
                             exit();
                         case 'docente':
-                            header("Location: docente/dashboard.php");
+                            header("Location: docente/index.php");
                             exit();
                         case 'estudiante':
-                            header("Location: estudiante/dashboard.php");
+                            header("Location: estudiante/dashboard_alumnos.php");
                             exit();
                         default:
                             // Si el rol no es reconocido
