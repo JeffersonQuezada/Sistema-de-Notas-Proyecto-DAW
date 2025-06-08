@@ -1,32 +1,32 @@
 <?php
-require_once '../includes/Database.php';
-// REMOVER: require_once '../controllers/DashboardController.php';
+require_once __DIR__ . '/../../includes/conexion.php';
 
 class DashboardModel {
-    private $db;
+    private $pdo;
 
     public function __construct() {
-        $this->db = Database::connect();
+        global $pdo;
+        $this->pdo = $pdo;
     }
 
     public function obtenerProgresoIndividual($id_estudiante) {
-        $sql = "SELECT a.titulo, e.calificacion, e.comentario, e.fecha_entrega
+        $sql = "SELECT a.nombre, e.calificacion, e.comentario, e.fecha_entrega
                 FROM entregas e
                 JOIN actividades a ON e.id_actividad = a.id_actividad
                 WHERE e.id_estudiante = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id_estudiante]);
         return $stmt->fetchAll();
     }
 
     public function obtenerProgresoGrupal($id_grupo) {
-        $sql = "SELECT u.nombre, a.titulo, e.calificacion, e.comentario, e.fecha_entrega
+        $sql = "SELECT u.nombre, a.nombre as actividad, e.calificacion, e.comentario, e.fecha_entrega
                 FROM entregas e
                 JOIN usuarios u ON e.id_estudiante = u.id_usuario
                 JOIN actividades a ON e.id_actividad = a.id_actividad
                 JOIN estudiantes_grupos eg ON u.id_usuario = eg.id_usuario
                 WHERE eg.id_grupo = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id_grupo]);
         return $stmt->fetchAll();
     }
@@ -40,19 +40,19 @@ class DashboardModel {
                 WHERE u.rol = 'estudiante'
                 GROUP BY u.id_usuario
                 HAVING entregas_pendientes > 0";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
     public function obtenerEstadisticasCumplimiento() {
-        $sql = "SELECT a.titulo, 
+        $sql = "SELECT a.nombre, 
                        COUNT(e.id_entrega) as entregas_recibidas, 
                        COUNT(DISTINCT e.id_estudiante) as estudiantes_entregaron
                 FROM actividades a
                 LEFT JOIN entregas e ON a.id_actividad = e.id_actividad
                 GROUP BY a.id_actividad";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
     }

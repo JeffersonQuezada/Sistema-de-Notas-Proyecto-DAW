@@ -100,18 +100,20 @@ if (!isset($pageTitle)) {
 
                 <?php elseif ($_SESSION['rol'] == 'estudiante'): ?>
                 <li class="nav-item">
-                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'dashboard.php') ?>" href="<?php echo url('estudiante/dashboard.php'); ?>"><i class="fas fa-home me-2"></i>Dashboard</a>
+                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'dashboard_alumnos.php') ?>" href="<?php echo url('estudiante/views/dashboard_alumnos.php'); ?>"><i class="fas fa-home me-2"></i>Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'cursos_disponibles.php') ?>" href="<?php echo url('estudiante/cursos/cursos_disponibles.php'); ?>"><i class="fas fa-book-open me-2"></i>Cursos</a>
+                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'cursos_listado.php') ?>" href="<?php echo url('estudiante/views/cursos_listado.php'); ?>"><i class="fas fa-book-open me-2"></i>Cursos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'mis_notas.php') ?>" href="<?php echo url('estudiante/cursos/mis_notas.php'); ?>"><i class="fas fa-clipboard-list me-2"></i>Mis Notas</a>
+                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'mis_notas.php') ?>" href="<?php echo url('estudiante/views/mis_notas.php'); ?>"><i class="fas fa-clipboard-list me-2"></i>Mis Notas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'subir_actividad.php') ?>" href="<?php echo url('estudiante/cursos/subir_actividad.php'); ?>"><i class="fas fa-upload me-2"></i>Entregar Actividad</a>
+                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'insignias.php') ?>" href="<?php echo url('estudiante/views/insignias.php'); ?>"><i class="fas fa-award me-2"></i>Insignias</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link text-white <?php echo activeMenu($_SERVER['SCRIPT_NAME'], 'misiones.php') ?>" href="<?php echo url('estudiante/views/misiones.php'); ?>"><i class="fas fa-bullseye me-2"></i>Misiones</a>
+                </li>
                 <?php endif; ?>
             </ul>
         </div>

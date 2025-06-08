@@ -1,36 +1,44 @@
 <?php
-require_once '../includes/Database.php';
+require_once __DIR__ . '/../../includes/conexion.php';
 
 class ActividadModel {
-    private $db;
+    private $pdo;
 
     public function __construct() {
-        $this->db = Database::connect();
+        global $pdo;
+        $this->pdo = $pdo;
     }
 
-    public function crearActividad($titulo, $descripcion, $fecha_entrega, $id_grupo) {
-        $sql = "INSERT INTO actividades (titulo, descripcion, fecha_entrega, id_grupo) VALUES (?, ?, ?, ?)";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$titulo, $descripcion, $fecha_entrega, $id_grupo]);
+    public function crearActividad($nombre, $descripcion, $fecha_limite, $id_curso, $tipo = 'Tarea') {
+        $sql = "INSERT INTO actividades (id_curso, nombre, descripcion, fecha_limite, tipo) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$id_curso, $nombre, $descripcion, $fecha_limite, $tipo]);
     }
 
-    public function editarActividad($id, $titulo, $descripcion, $fecha_entrega, $id_grupo) {
-        $sql = "UPDATE actividades SET titulo = ?, descripcion = ?, fecha_entrega = ?, id_grupo = ? WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$titulo, $descripcion, $fecha_entrega, $id_grupo, $id]);
+    public function editarActividad($id_actividad, $nombre, $descripcion, $fecha_limite, $tipo) {
+        $sql = "UPDATE actividades SET nombre = ?, descripcion = ?, fecha_limite = ?, tipo = ? WHERE id_actividad = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$nombre, $descripcion, $fecha_limite, $tipo, $id_actividad]);
     }
 
-    public function eliminarActividad($id) {
-        $sql = "DELETE FROM actividades WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$id]);
+    public function eliminarActividad($id_actividad) {
+        $sql = "DELETE FROM actividades WHERE id_actividad = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$id_actividad]);
     }
 
-    public function listarActividades() {
-        $sql = "SELECT * FROM actividades";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
+    public function listarActividadesPorCurso($id_curso) {
+        $sql = "SELECT * FROM actividades WHERE id_curso = ? ORDER BY fecha_limite DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id_curso]);
         return $stmt->fetchAll();
+    }
+
+    public function obtenerActividadPorId($id_actividad) {
+        $sql = "SELECT * FROM actividades WHERE id_actividad = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id_actividad]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 ?>

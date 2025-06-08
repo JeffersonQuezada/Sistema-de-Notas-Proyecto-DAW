@@ -8,20 +8,25 @@ class ActividadController {
         $this->actividadModel = new ActividadModel();
     }
 
-    public function crearActividad($titulo, $descripcion, $fecha_entrega, $id_grupo) {
-        return $this->actividadModel->crearActividad($titulo, $descripcion, $fecha_entrega, $id_grupo);
+    public function crearActividad($nombre, $descripcion, $fecha_limite, $id_curso, $tipo = 'Tarea') {
+        // Validar que todos los campos requeridos estén presentes
+        if (empty($nombre) || empty($descripcion) || empty($fecha_limite) || empty($id_curso)) {
+            return false;
+        }
+
+        return $this->actividadModel->crearActividad($nombre, $descripcion, $fecha_limite, $id_curso, $tipo);
     }
 
-    public function editarActividad($id, $titulo, $descripcion, $fecha_entrega, $id_grupo) {
-        return $this->actividadModel->editarActividad($id, $titulo, $descripcion, $fecha_entrega, $id_grupo);
+    public function editarActividad($id_actividad, $nombre, $descripcion, $fecha_limite, $tipo) {
+        return $this->actividadModel->editarActividad($id_actividad, $nombre, $descripcion, $fecha_limite, $tipo);
     }
 
-    public function eliminarActividad($id) {
-        return $this->actividadModel->eliminarActividad($id);
+    public function eliminarActividad($id_actividad) {
+        return $this->actividadModel->eliminarActividad($id_actividad);
     }
 
-    public function listarActividades() {
-        return $this->actividadModel->listarActividades();
+    public function listarActividadesPorCurso($id_curso) {
+        return $this->actividadModel->listarActividadesPorCurso($id_curso);
     }
 }
 ?>

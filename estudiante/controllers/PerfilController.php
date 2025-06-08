@@ -1,0 +1,21 @@
+<?php
+require_once '../models/UsuarioModel.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+class PerfilController {
+    private $usuarioModel;
+    public function __construct() {
+        $this->usuarioModel = new UsuarioModel();
+    }
+    public function verPerfil() {
+        $id_usuario = $_SESSION['id_usuario'];
+        $perfil = $this->usuarioModel->obtenerPerfil($id_usuario);
+        include '../views/perfil.php';
+    }
+    public function actualizarPerfil($nombre, $correo) {
+        $id_usuario = $_SESSION['id_usuario'];
+        $this->usuarioModel->actualizarPerfil($id_usuario, $nombre, $correo);
+        header("Location: ../views/perfil.php?success=1");
+    }
+}
+?>

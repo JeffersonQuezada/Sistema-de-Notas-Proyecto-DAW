@@ -51,10 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               header("Location: admin/dashboard.php");
               exit();
             case 'docente':
-              header("Location: docente/dashboard_principal.php"); // ¡Cambiado!
+              header("Location: docente/views/dashboard_principal.php");
               exit();
             case 'estudiante':
-              header("Location: estudiante/dashboard.php"); // ¡Cambiado!
+              header("Location: estudiante/views/dashboard_alumnos.php");
               exit();
             default:
               // Si el rol no es reconocido
@@ -126,16 +126,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                   <div class="form-outline form-white mb-4">
-                    <input type="email" id="correo" name="correo" class="form-control form-control-lg" required />
+                    <input type="email" id="correo" name="correo" class="form-control form-control-lg" required autofocus placeholder="Correo electrónico" />
                     <label class="form-label" for="correo">Correo electrónico</label>
                   </div>
 
                   <div class="form-outline form-white mb-4">
-                    <input type="password" id="contrasena" name="contrasena" class="form-control form-control-lg" required />
+                    <input type="password" id="contrasena" name="contrasena" class="form-control form-control-lg" required placeholder="Contraseña" />
                     <label class="form-label" for="contrasena">Contraseña</label>
                   </div>
 
-                  <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">¿Olvidaste tu contraseña?</a></p>
+                  <p class="small mb-5 pb-lg-2">
+                    <a class="text-white-50" href="recuperar_contrasena.php">¿Olvidaste tu contraseña?</a>
+                  </p>
 
                   <button class="btn btn-outline-light btn-lg px-5" type="submit">Ingresar</button>
                 </form>
