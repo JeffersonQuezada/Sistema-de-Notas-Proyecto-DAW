@@ -8,15 +8,15 @@ if (isset($_SESSION['id_usuario'])) {
             header("Location: admin/dashboard.php");
             exit();
         case 'docente':
-            header("Location: docente/dashboard.php");
+            header("Location: docente/views/dashboard_principal.php");
             exit();
         case 'estudiante':
             header("Location: estudiante/dashboard.php");
             exit();
     }
 }
-
 // Si no está logueado, mostrar página de inicio
+session_destroy();
 ?>
 
 <!DOCTYPE html>

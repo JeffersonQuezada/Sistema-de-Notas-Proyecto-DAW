@@ -1,0 +1,115 @@
+Listado de rutas de carpetas
+
+C:.
+¦   .gitignore
+¦   .htaccess
+¦   composer.json
+¦   composer.lock
+¦   crear_admin.txt
+¦   crear_cuenta.php
+¦   index.php
+¦   lista.txt
+¦   login.php
+¦   logout.php
+¦   perfil.php
+¦   sistema-notas.sql
+¦   
++---admin
+¦   ¦   .htaccess
+¦   ¦   crear.php
+¦   ¦   dashboard.php
+¦   ¦   
+¦   +---cursos
+¦   ¦       crear.php
+¦   ¦       horarios.php
+¦   ¦       index.php
+¦   ¦       
+¦   +---reportes
+¦   ¦       generar.php
+¦   ¦       index.php
+¦   ¦       
+¦   +---usuarios
+¦           index.php
+¦           
++---assets
+¦   +---clases
+¦   +---css
+¦   +---js
+¦   +---uploads
++---clases
+¦       Adtividad.php
+¦       Asistencia.php
+¦       Curso.php
+¦       Nota.php
+¦       Notificacion.php
+¦       Usuarios.php
+¦       
++---docente
+¦   ¦   dashboard_grupal.php
+¦   ¦   dashboard_individual.php
+¦   ¦   dashboard_principal.php
+¦   ¦   index.txt
+¦   ¦   
+¦   +---controllers
+¦   ¦       ActividadController.php
+¦   ¦       DashboardController.php
+¦   ¦       DocenteController.php
+¦   ¦       EntregaController.php
+¦   ¦       EstudianteController.php
+¦   ¦       generar_reporte.php
+¦   ¦       GrupoController.php
+¦   ¦       MisionController.php
+¦   ¦       ReporteController.php
+¦   ¦       
+¦   +---cursos
+¦   +---models
+¦   ¦       ActividadModel.php
+¦   ¦       DashboardModel.php
+¦   ¦       DocenteModel.php
+¦   ¦       EntregaModel.php
+¦   ¦       EstudianteModel.php
+¦   ¦       GrupoModel.php
+¦   ¦       MisionModel.php
+¦   ¦       ReporteModel.php
+¦   ¦       
+¦   +---reportes
+¦   ¦       generar_reporte.php
+¦   ¦       
+¦   +---usuarios
+¦   +---views
+¦           actividades_listado.php
+¦           nueva_actividad.php
+¦           reportes.php
+¦           
++---estudiante
+¦   ¦   dashboard.php
+¦   ¦   dashboard_alumnos.php
+¦   ¦   estilologin.css
+¦   ¦   index.php
+¦   ¦   proyectodaw2025.code-workspace
+¦   ¦   script.js
+¦   ¦   
+¦   +---actividades
+¦   +---cursos
+¦           cursos_disponibles.php
+¦           inscribirse.php
+¦           mis_cursos.php
+¦           mis_notas.php
+¦           subir_actividad.php
+¦           ver_curso.php
+¦           
++---includes
+¦       auth.php
+¦       conexion.php
+¦       config.php
+¦       conxion_class.php
+¦       Database.php
+¦       footer.php
+¦       funciones.php
+¦       header.php
+¦       
++---sql
+¦       gestion_notas.sql
+¦       
++---vendor
+    

@@ -1,8 +1,7 @@
+DirectoryIndex index.php
 RewriteEngine On
 
-RewriteCond %{REQUEST_FILENAME} !-d
+# Redirige todo al index.php principal
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-l
- 
- 
-RewriteRule ^(.*)$ index.php?url=$1 [L,QSA] 
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]

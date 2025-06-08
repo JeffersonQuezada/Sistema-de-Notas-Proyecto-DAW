@@ -1,6 +1,6 @@
 <?php
 require_once '../includes/Database.php';
-require_once '../controllers/DashboardController.php';
+// REMOVER: require_once '../controllers/DashboardController.php';
 
 class DashboardModel {
     private $db;
@@ -12,7 +12,7 @@ class DashboardModel {
     public function obtenerProgresoIndividual($id_estudiante) {
         $sql = "SELECT a.titulo, e.calificacion, e.comentario, e.fecha_entrega
                 FROM entregas e
-                JOIN actividades a ON e.id_actividad = a.id
+                JOIN actividades a ON e.id_actividad = a.id_actividad
                 WHERE e.id_estudiante = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id_estudiante]);
@@ -22,9 +22,9 @@ class DashboardModel {
     public function obtenerProgresoGrupal($id_grupo) {
         $sql = "SELECT u.nombre, a.titulo, e.calificacion, e.comentario, e.fecha_entrega
                 FROM entregas e
-                JOIN usuarios u ON e.id_estudiante = u.id
-                JOIN actividades a ON e.id_actividad = a.id
-                JOIN estudiante_grupo eg ON u.id = eg.id_estudiante
+                JOIN usuarios u ON e.id_estudiante = u.id_usuario
+                JOIN actividades a ON e.id_actividad = a.id_actividad
+                JOIN estudiantes_grupos eg ON u.id_usuario = eg.id_usuario
                 WHERE eg.id_grupo = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id_grupo]);
@@ -32,22 +32,26 @@ class DashboardModel {
     }
 
     public function identificarEstudiantesEnRiesgo() {
-        $sql = "SELECT u.nombre, COUNT(e.id) as entregas_pendientes
+        $sql = "SELECT u.nombre, COUNT(a.id_actividad) - COUNT(e.id_entrega) as entregas_pendientes
                 FROM usuarios u
-                LEFT JOIN entregas e ON u.id = e.id_estudiante
-                WHERE e.calificacion IS NULL
-                GROUP BY u.id
-                HAVING COUNT(e.id) > 0";
+                JOIN estudiantes_grupos eg ON u.id_usuario = eg.id_usuario
+                JOIN actividades a ON a.id_grupo = eg.id_grupo
+                LEFT JOIN entregas e ON u.id_usuario = e.id_estudiante AND a.id_actividad = e.id_actividad
+                WHERE u.rol = 'estudiante'
+                GROUP BY u.id_usuario
+                HAVING entregas_pendientes > 0";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
     public function obtenerEstadisticasCumplimiento() {
-        $sql = "SELECT a.titulo, COUNT(e.id) as entregas_recibidas, COUNT(DISTINCT e.id_estudiante) as estudiantes_entregaron
+        $sql = "SELECT a.titulo, 
+                       COUNT(e.id_entrega) as entregas_recibidas, 
+                       COUNT(DISTINCT e.id_estudiante) as estudiantes_entregaron
                 FROM actividades a
-                LEFT JOIN entregas e ON a.id = e.id_actividad
-                GROUP BY a.id";
+                LEFT JOIN entregas e ON a.id_actividad = e.id_actividad
+                GROUP BY a.id_actividad";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
