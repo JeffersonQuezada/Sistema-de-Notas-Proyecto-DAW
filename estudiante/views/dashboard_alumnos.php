@@ -1,5 +1,4 @@
-<?php
-include '../../includes/header.php';
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 // Inicializar variables para evitar warnings
 $cursos = $cursos ?? [];
@@ -11,7 +10,7 @@ $misiones = $misiones ?? [];
 
 <div class="container mt-4">
     <h2>Mi Panel</h2>
-    <div class="row">
+    <div class="row">zzzz
         <div class="col-md-6">
             <h4>Mis Cursos</h4>
             <ul class="list-group">
@@ -76,4 +75,4 @@ $misiones = $misiones ?? [];
     </div>
 </div>
 
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

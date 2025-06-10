@@ -5,13 +5,13 @@ session_start();
 if (isset($_SESSION['id_usuario'])) {
     switch ($_SESSION['rol']) {
         case 'admin':
-            header("Location: admin/dashboard.php");
+            header("Location: admin/index.php?accion=dashboard");
             exit();
         case 'docente':
-            header("Location: docente/views/dashboard_principal.php");
+            header("Location: docente/index.php?accion=dashboard");
             exit();
         case 'estudiante':
-            header("Location: estudiante/dashboard.php");
+            header("Location: estudiante/index.php?accion=dashboard");
             exit();
     }
 }

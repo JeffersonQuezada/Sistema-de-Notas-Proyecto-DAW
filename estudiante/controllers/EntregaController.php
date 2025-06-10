@@ -1,5 +1,5 @@
 <?php
-require_once '../models/EntregaModel.php';
+require_once __DIR__ . '/../models/EntregaModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 class EntregaController {
@@ -13,7 +13,8 @@ class EntregaController {
         $ruta = '../../uploads/' . basename($archivo);
         move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
         $this->entregaModel->entregarActividad($id_estudiante, $id_actividad, $archivo);
-        header("Location: ../views/actividades_listado.php?success=1");
+        header("Location: ../index.php?accion=mis_entregas&success=1");
+        exit();
     }
     public function misEntregas() {
         $id_estudiante = $_SESSION['id_usuario'];

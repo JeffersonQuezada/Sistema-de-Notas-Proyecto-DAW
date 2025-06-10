@@ -1,4 +1,4 @@
-<?php include '../../includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 <?php
 $notas = $notas ?? [];
 ?>
@@ -23,4 +23,4 @@ $notas = $notas ?? [];
         </tbody>
     </table>
 </div>
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

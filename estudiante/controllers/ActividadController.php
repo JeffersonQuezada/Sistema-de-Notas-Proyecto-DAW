@@ -1,5 +1,5 @@
 <?php
-require_once '../models/ActividadModel.php';
+require_once __DIR__ . '/../models/ActividadModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 class ActividadController {

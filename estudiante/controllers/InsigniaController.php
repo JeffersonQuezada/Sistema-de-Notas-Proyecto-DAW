@@ -1,5 +1,5 @@
 <?php
-require_once '../models/InsigniaModel.php';
+require_once __DIR__ . '/../models/InsigniaModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 class InsigniaController {

@@ -1,4 +1,4 @@
-<?php include '../../includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 <?php
 $cursos = $cursos ?? [];
 ?>
@@ -28,4 +28,4 @@ $cursos = $cursos ?? [];
         <?php endforeach; ?>
     </div>
 </div>
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

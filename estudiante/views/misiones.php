@@ -1,4 +1,4 @@
-<?php include '../../includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 <?php
 $misiones = $misiones ?? [];
 ?>
@@ -26,4 +26,4 @@ $misiones = $misiones ?? [];
         <?php endforeach; ?>
     </div>
 </div>
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

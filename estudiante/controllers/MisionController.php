@@ -1,6 +1,6 @@
 <?php
-require_once '../models/MisionModel.php';
-require_once '../models/EntregaModel.php'; // Asegúrate de incluir el modelo de entrega
+require_once __DIR__ . '/../models/MisionModel.php';
+require_once __DIR__ . '/../models/EntregaModel.php'; // Asegúrate de incluir el modelo de entrega
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 class MisionController {
@@ -25,7 +25,8 @@ class MisionController {
     public function aceptar($id_mision) {
         $id_estudiante = $_SESSION['id_usuario'];
         $this->misionModel->aceptarMision($id_estudiante, $id_mision);
-        header("Location: ../views/misiones.php?success=1");
+        header("Location: ../index.php?accion=misiones&success=1");
+        exit();
     }
 }
 ?>
