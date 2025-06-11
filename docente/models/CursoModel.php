@@ -9,6 +9,12 @@ class CursoModel {
         $this->pdo = $pdo;
     }
 
+    public function crearCurso($nombre_curso, $descripcion, $id_docente, $contrasena, $capacidad = 50, $grupo = null) {
+    $sql = "INSERT INTO cursos (nombre_curso, descripcion, id_docente, contrasena, capacidad, grupo) 
+            VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $this->pdo->prepare($sql);
+    return $stmt->execute([$nombre_curso, $descripcion, $id_docente, $contrasena, $capacidad, $grupo]);
+}
     public function listarCursosPorDocente($id_docente) {
         $sql = "SELECT * FROM cursos WHERE id_docente = :id_docente";
         $stmt = $this->pdo->prepare($sql);

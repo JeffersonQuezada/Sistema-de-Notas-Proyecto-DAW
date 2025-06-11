@@ -1,5 +1,5 @@
 <?php
-require_once '../models/ActividadModel.php';
+include __DIR__ . '/../models/ActividadModel.php';
 
 class ActividadController {
     private $actividadModel;

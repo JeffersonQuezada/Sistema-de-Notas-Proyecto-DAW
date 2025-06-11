@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/conexion.php';
 
-class ActividadModel {
+class ActividadModel{
     private $pdo;
 
     public function __construct() {
@@ -9,8 +9,14 @@ class ActividadModel {
         $this->pdo = $pdo;
     }
 
-    public function crearActividad($nombre, $descripcion, $fecha_limite, $id_curso, $tipo = 'Tarea') {
-        $sql = "INSERT INTO actividades (id_curso, nombre, descripcion, fecha_limite, tipo) VALUES (?, ?, ?, ?, ?)";
+public function crearActividad($nombre, $descripcion, $fecha_limite, $id_curso, $tipo = 'Tarea') {
+    $tiposPermitidos = ['Tarea', 'Examen', 'Proyecto'];
+    if (!in_array($tipo, $tiposPermitidos)) {
+        throw new Exception("Tipo de actividad no válido");
+    }
+    
+    $sql = "INSERT INTO actividades (id_curso, nombre, descripcion, fecha_limite, tipo) 
+            VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$id_curso, $nombre, $descripcion, $fecha_limite, $tipo]);
     }

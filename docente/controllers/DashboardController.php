@@ -1,5 +1,5 @@
 <?php
-require_once '../models/DashboardModel.php';
+require_once __DIR__.'/../models/DashboardModel.php';
 
 class DashboardController {
     private $dashboardModel;
@@ -37,7 +37,7 @@ class DashboardController {
         } else {
             $estudiantesEnRiesgo = $this->identificarEstudiantesEnRiesgo();
             $estadisticasCumplimiento = $this->obtenerEstadisticasCumplimiento();
-            include '../views/dashboard_principal.php';
+            include __DIR__ .'/../views/dashboard_principal.php';
         }
     }
 }

@@ -1,83 +1,124 @@
 <?php
-// filepath: admin/index.php
-
 session_start();
-if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'docente') {
+
+// Verificar si el usuario es administrador
+if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'admin') {
     header("Location: ../login.php");
     exit();
 }
 
-// Obtén la acción desde la URL, por defecto 'dashboard'
+require_once __DIR__ . '/../includes/conexion.php';
+
 $accion = $_GET['accion'] ?? 'dashboard';
 $id = $_GET['id'] ?? null;
 
+// Enrutamiento para el administrador
 switch ($accion) {
     case 'dashboard':
-        require_once 'controllers/DashboardController.php';
-        $controller = new DashboardController();
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController();
         $controller->mostrarDashboard();
         break;
-
-    case 'actividades':
-        require_once 'controllers/ActividadController.php';
-        $controller = new ActividadController();
-        $controller->listarActividades();
+        
+    case 'usuarios':
+        require_once __DIR__ . '/controllers/UsuarioController.php';
+        $controller = new UsuarioController();
+        $controller->listarUsuarios();
         break;
-
-    case 'nueva_actividad':
-        require_once 'controllers/ActividadController.php';
-        $controller = new ActividadController();
-        $controller->nuevaActividad();
+        
+    case 'crear_usuario':
+        require_once __DIR__ . '/controllers/UsuarioController.php';
+        $controller = new UsuarioController();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->crearUsuario($_POST);
+        } else {
+            $controller->mostrarFormularioCreacion();
+        }
         break;
-
-    case 'editar_actividad':
-        require_once 'controllers/ActividadController.php';
-        $controller = new ActividadController();
-        $controller->editarActividad($id);
+        
+    case 'editar_usuario':
+        if ($id) {
+            require_once __DIR__ . '/controllers/UsuarioController.php';
+            $controller = new UsuarioController();
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $controller->actualizarUsuario($id, $_POST);
+            } else {
+                $controller->mostrarFormularioEdicion($id);
+            }
+        }
         break;
-
-    case 'ver_actividad':
-        require_once 'controllers/ActividadController.php';
-        $controller = new ActividadController();
-        $controller->verActividad($id);
+        
+    case 'eliminar_usuario':
+        if ($id) {
+            require_once __DIR__ . '/controllers/UsuarioController.php';
+            $controller = new UsuarioController();
+            $controller->eliminarUsuario($id);
+        }
         break;
-
-    case 'entregas':
-        require_once 'controllers/EntregaController.php';
-        $controller = new EntregaController();
-        $controller->listarEntregas($id);
+        
+    case 'cursos_admin':
+        require_once __DIR__ . '/controllers/CursoAdminController.php';
+        $controller = new CursoAdminController();
+        $controller->listarCursos();
         break;
-
-    case 'misiones':
-        require_once 'controllers/MisionController.php';
-        $controller = new MisionController();
-        $controller->listarMisiones();
+        
+    case 'crear_curso':
+        require_once __DIR__ . '/controllers/CursoAdminController.php';
+        $controller = new CursoAdminController();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->crearCurso($_POST);
+        } else {
+            $controller->mostrarFormularioCreacionCurso();
+        }
         break;
-
-    case 'ver_mision':
-        require_once 'controllers/MisionController.php';
-        $controller = new MisionController();
-        $controller->verMision($id);
+        
+    case 'editar_curso':
+        if ($id) {
+            require_once __DIR__ . '/controllers/CursoAdminController.php';
+            $controller = new CursoAdminController();
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $controller->actualizarCurso($id, $_POST);
+            } else {
+                $controller->mostrarFormularioEdicionCurso($id);
+            }
+        }
         break;
-
-    case 'perfil':
-        require_once 'controllers/PerfilController.php';
-        $controller = new PerfilController();
-        $controller->verPerfil();
+        
+    case 'eliminar_curso':
+        if ($id) {
+            require_once __DIR__ . '/controllers/CursoAdminController.php';
+            $controller = new CursoAdminController();
+            $controller->eliminarCurso($id);
+        }
         break;
-
+        
+    case 'reportes':
+        require_once __DIR__ . '/controllers/ReporteController.php';
+        $controller = new ReporteController();
+        $controller->mostrarReportes();
+        break;
+        
+    case 'reporte_usuarios':
+        require_once __DIR__ . '/controllers/ReporteController.php';
+        $controller = new ReporteController();
+        $controller->generarReporteUsuarios();
+        break;
+        
+    case 'reporte_cursos':
+        require_once __DIR__ . '/controllers/ReporteController.php';
+        $controller = new ReporteController();
+        $controller->generarReporteCursos();
+        break;
+        
+    case 'reporte_actividades':
+        require_once __DIR__ . '/controllers/ReporteController.php';
+        $controller = new ReporteController();
+        $controller->generarReporteActividades();
+        break;
+        
     default:
-        require_once 'controllers/DashboardController.php';
-        $controller = new DashboardController();
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController();
         $controller->mostrarDashboard();
         break;
 }
-?>
-<?php
-if (isset($_GET['bienvenido']) && $_GET['bienvenido'] == 1 && isset($_SESSION['nombre'])): ?>
-    <div class="alert alert-success text-center mt-4">
-        ¡Bienvenido, <strong><?= htmlspecialchars($_SESSION['nombre']) ?></strong>!
-        <a href="index.php?accion=dashboard" class="btn btn-primary ms-3">Ir al Dashboard</a>
-        <a href="index.php?accion=reportes">Reportes</a>
-    </div>
-<?php endif; ?>

@@ -9,22 +9,22 @@ class GrupoModel {
         $this->pdo = $pdo;
     }
 
-    public function crearGrupo($nombre, $id_docente) {
-        $sql = "INSERT INTO grupos (nombre, id_docente) VALUES (?, ?)";
+    public function crearGrupo($nombre, $id_usuario) {
+        $sql = "INSERT INTO grupos (nombre, id_usuario) VALUES (?, ?)";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([$nombre, $id_docente]);
+        return $stmt->execute([$nombre, $id_usuario]);
     }
 
-    public function editarGrupo($id_grupo, $nombre, $id_docente) {
-        $sql = "UPDATE grupos SET nombre = ? WHERE id_grupo = ? AND id_docente = ?";
+    public function editarGrupo($id_grupo, $nombre, $id_usuario) {
+        $sql = "UPDATE grupos SET nombre = ? WHERE id_grupo = ? AND id_usuario = ?";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([$nombre, $id_grupo, $id_docente]);
+        return $stmt->execute([$nombre, $id_grupo, $id_usuario]);
     }
 
-    public function eliminarGrupo($id_grupo, $id_docente) {
-        $sql = "DELETE FROM grupos WHERE id_grupo = ? AND id_docente = ?";
+    public function eliminarGrupo($id_grupo, $id_usuario) {
+        $sql = "DELETE FROM grupos WHERE id_grupo = ? AND id_usuario = ?";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([$id_grupo, $id_docente]);
+        return $stmt->execute([$id_grupo, $id_usuario]);
     }
 
     public function asignarEstudianteGrupo($id_usuario, $id_grupo) {
@@ -42,10 +42,10 @@ class GrupoModel {
         return $stmt->fetchAll();
     }
 
-    public function listarGrupos($id_docente) {
-        $sql = "SELECT * FROM grupos WHERE id_docente = ?";
+    public function listarGrupos($id_usuario) {
+        $sql = "SELECT * FROM grupos WHERE id_usuario = ?";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$id_docente]);
+        $stmt->execute([$id_usuario]);
         return $stmt->fetchAll();
     }
 }

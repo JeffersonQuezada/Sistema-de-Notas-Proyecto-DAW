@@ -1,65 +1,67 @@
 <?php
 require_once __DIR__ . '/../models/UsuarioModel.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+require_once __DIR__ . '/../views/ListaUsuariosView.php';
+require_once __DIR__ . '/../views/FormularioUsuarioView.php';
 
 class UsuarioController {
-    private $usuarioModel;
+    private $model;
+    
     public function __construct() {
-        $this->usuarioModel = new UsuarioModel();
+        $this->model = new UsuarioModel();
     }
-    public function listar() {
-        $usuarios = $this->usuarioModel->listarUsuarios();
-        include __DIR__ . '/../views/usuarios_listado.php';
+    
+    public function listarUsuarios() {
+        $usuarios = $this->model->obtenerTodos();
+        $view = new ListaUsuariosView();
+        $view->mostrar($usuarios);
     }
-    public function crear() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nombre = $_POST['nombre'];
-            $correo = $_POST['correo'];
-            $contrasena = $_POST['contrasena'];
-            $rol = $_POST['rol'];
-            // Validar si el correo ya existe
-            if ($this->usuarioModel->existeCorreo($correo)) {
-                header("Location: ../index.php?accion=usuarios_crear&error=El correo ya está registrado");
-                exit();
-            }
-            $this->usuarioModel->crearUsuario($nombre, $correo, $contrasena, $rol);
-            header("Location: ../index.php?accion=usuarios&success=1");
-            exit();
-        }
-        include __DIR__ . '/../views/usuarios_crear.php';
+    
+    public function mostrarFormularioCreacion() {
+        $view = new FormularioUsuarioView();
+        $view->mostrar(null, 'Crear Usuario');
     }
-    public function editar() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_usuario = $_POST['id_usuario'];
-            $nombre = $_POST['nombre'];
-            $correo = $_POST['correo'];
-            $rol = $_POST['rol'];
-            $this->usuarioModel->actualizarUsuario($id_usuario, $nombre, $correo, $rol);
-            header("Location: ../index.php?accion=usuarios&success=1");
-            exit();
-        }
-        // Obtener datos del usuario para mostrar en el formulario
-        $id_usuario = $_GET['id'] ?? null;
-        if ($id_usuario) {
-            $usuario = $this->usuarioModel->obtenerUsuarioPorId($id_usuario);
-            include __DIR__ . '/../views/usuario_editar.php';
+    
+    public function crearUsuario($datos) {
+        $resultado = $this->model->crear($datos);
+        if ($resultado) {
+            $_SESSION['mensaje'] = 'Usuario creado exitosamente';
+            header('Location: index.php?accion=usuarios');
         } else {
-            header("Location: ../index.php?accion=usuarios&error=Usuario no encontrado");
-            exit();
+            $_SESSION['error'] = 'Error al crear el usuario';
+            $view = new FormularioUsuarioView();
+            $view->mostrar($datos, 'Crear Usuario');
         }
     }
-}
-
-// --- Manejo directo de la acción ---
-if (isset($_GET['accion'])) {
-    $controller = new UsuarioController();
-    $accion = $_GET['accion'];
-    if ($accion === 'listar') {
-        $controller->listar();
-    } elseif ($accion === 'crear') {
-        $controller->crear();
-    } elseif ($accion === 'editar') {
-        $controller->editar();
+    
+    public function mostrarFormularioEdicion($id) {
+        $usuario = $this->model->obtenerPorId($id);
+        if ($usuario) {
+            $view = new FormularioUsuarioView();
+            $view->mostrar($usuario, 'Editar Usuario');
+        } else {
+            $_SESSION['error'] = 'Usuario no encontrado';
+            header('Location: index.php?accion=usuarios');
+        }
+    }
+    
+    public function actualizarUsuario($id, $datos) {
+        $resultado = $this->model->actualizar($id, $datos);
+        if ($resultado) {
+            $_SESSION['mensaje'] = 'Usuario actualizado exitosamente';
+            header('Location: index.php?accion=usuarios');
+        } else {
+            $_SESSION['error'] = 'Error al actualizar el usuario';
+            header("Location: index.php?accion=editar_usuario&id=$id");
+        }
+    }
+    
+    public function eliminarUsuario($id) {
+        $resultado = $this->model->eliminar($id);
+        if ($resultado) {
+            $_SESSION['mensaje'] = 'Usuario eliminado exitosamente';
+        } else {
+            $_SESSION['error'] = 'Error al eliminar el usuario';
+        }
+        header('Location: index.php?accion=usuarios');
     }
 }
-?>

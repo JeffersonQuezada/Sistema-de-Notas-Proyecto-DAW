@@ -48,23 +48,17 @@ if (!isset($pageTitle)) {
                         <i class="fas fa-user-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <?php if ($_SESSION['rol'] == 'estudiante'): ?>
                         <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>index.php?accion=perfil"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <?php elseif ($_SESSION['rol'] == 'docente'): ?>
-                        <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>index.php?accion=perfil"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <?php elseif ($_SESSION['rol'] == 'admin'): ?>
-                        <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>index.php?accion=perfil"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <?php endif; ?>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>../logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+                        <li><a class="dropdown-item" href="<?php echo dirname(BASE_URL); ?>/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
                     </ul>
                 </li>
                 <?php else: ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo BASE_URL; ?>login.php">Iniciar sesión</a>
+                    <a class="nav-link" href="<?php echo dirname(BASE_URL); ?>/login.php">Iniciar sesión</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo BASE_URL; ?>registro.php">Registrarse</a>
+                    <a class="nav-link" href="<?php echo dirname(BASE_URL); ?>/registro.php">Registrarse</a>
                 </li>
                 <?php endif; ?>
             </ul>

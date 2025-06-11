@@ -10,7 +10,7 @@ $id = $_GET['id'] ?? null;
 
 switch ($accion) {
     case 'dashboard':
-        require_once 'controllers/DashboardController.php';
+        require_once __DIR__ . '/controllers/DashboardController.php';
         $controller = new DashboardController();
         $controller->mostrarDashboard();
         break;
@@ -18,7 +18,6 @@ switch ($accion) {
     case 'actividades':
         require_once 'controllers/ActividadController.php';
         $controller = new ActividadController();
-        // Aquí puedes listar actividades o mostrar una vista
         include __DIR__ . '/views/actividades_listado.php';
         break;
 

@@ -1,6 +1,7 @@
 <?php
-require_once '../models/ActividadModel.php';
-require_once '../models/CursoModel.php';
+
+include __DIR__ . '/../models/ActividadModel.php';
+include __DIR__ . '/../models/CursoModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 // Verificar sesión

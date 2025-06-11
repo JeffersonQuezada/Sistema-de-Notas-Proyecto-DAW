@@ -110,7 +110,7 @@ CREATE TABLE `cursos` (
   PRIMARY KEY (`id_curso`),
   KEY `id_docente` (`id_docente`),
   CONSTRAINT `cursos_ibfk_1` FOREIGN KEY (`id_docente`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `cursos` */
 
@@ -125,7 +125,8 @@ insert  into `cursos`(`id_curso`,`nombre_curso`,`descripcion`,`id_docente`,`cont
 (8,'Programación I','Introducción a la programación con Python',7,'prog2025b',35,'B'),
 (9,'Historia Universal','Historia desde la antigüedad hasta el siglo XX',4,'hist2025',40,'A'),
 (10,'Literatura Española','Literatura del Siglo de Oro',5,'lit2025',25,'A'),
-(11,'Ejemplo','emplo para pruebas',20,'$2y$10$BtMipT3wfaMTWQ8dMiBFyucbb12g6pIIX8yZPZO.fydQZ.2Im0XvC',40,NULL);
+(11,'Ejemplo','emplo para pruebas',20,'$2y$10$BtMipT3wfaMTWQ8dMiBFyucbb12g6pIIX8yZPZO.fydQZ.2Im0XvC',40,NULL),
+(12,'Fisica cuantica','hacer un hola mundo en python',5,'$2y$10$7Sa1l6iVEmi98fkRTwkoB.23i1Cq7N56fFMVssmYVXk1/jaCYka9K',45,'');
 
 /*Table structure for table `docentes` */
 
@@ -178,7 +179,7 @@ CREATE TABLE `estudiantes_cursos` (
   KEY `id_curso` (`id_curso`),
   CONSTRAINT `estudiantes_cursos_ibfk_1` FOREIGN KEY (`id_estudiante`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
   CONSTRAINT `estudiantes_cursos_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `estudiantes_cursos` */
 
@@ -207,7 +208,12 @@ insert  into `estudiantes_cursos`(`id`,`id_estudiante`,`id_curso`,`grupo`) value
 (22,9,2,'B'),
 (23,10,1,'A'),
 (24,10,4,'A'),
-(25,10,6,'B');
+(25,10,6,'B'),
+(26,21,5,NULL),
+(27,21,11,NULL),
+(28,21,1,NULL),
+(29,21,9,NULL),
+(30,21,10,NULL);
 
 /*Table structure for table `estudiantes_grupos` */
 
@@ -322,6 +328,9 @@ CREATE TABLE `misiones` (
   `descripcion` text DEFAULT NULL,
   `recompensa` varchar(50) DEFAULT NULL,
   `id_grupo` int(11) DEFAULT NULL,
+  `fecha_inicio` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fecha_fin` timestamp NULL DEFAULT NULL,
+  `prioridad` int(11) DEFAULT 1,
   PRIMARY KEY (`id_mision`),
   KEY `id_grupo` (`id_grupo`),
   CONSTRAINT `misiones_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupos` (`id_grupo`)
@@ -329,9 +338,9 @@ CREATE TABLE `misiones` (
 
 /*Data for the table `misiones` */
 
-insert  into `misiones`(`id_mision`,`titulo`,`descripcion`,`recompensa`,`id_grupo`) values 
-(1,'Primeros Pasos','Completa tu primer curso','100 puntos',NULL),
-(2,'Estrella Naciente','Obtén una calificación de 90+','150 puntos',NULL);
+insert  into `misiones`(`id_mision`,`titulo`,`descripcion`,`recompensa`,`id_grupo`,`fecha_inicio`,`fecha_fin`,`prioridad`) values 
+(1,'Primeros Pasos','Completa tu primer curso','100 puntos',NULL,'2025-06-11 09:57:19',NULL,1),
+(2,'Estrella Naciente','Obtén una calificación de 90+','150 puntos',NULL,'2025-06-11 09:57:19',NULL,1);
 
 /*Table structure for table `misiones_estudiantes` */
 
@@ -450,35 +459,43 @@ CREATE TABLE `usuarios` (
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   `primer_login` tinyint(1) DEFAULT 0,
   `mfa_codigo` varchar(10) DEFAULT NULL,
+  `token_recuperacion` varchar(100) DEFAULT NULL,
+  `token_expira` datetime DEFAULT NULL,
   PRIMARY KEY (`id_usuario`),
   UNIQUE KEY `correo` (`correo`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `usuarios` */
 
-insert  into `usuarios`(`id_usuario`,`nombre`,`correo`,`contrasena`,`rol`,`fecha_registro`,`primer_login`,`mfa_codigo`) values 
-(1,'Jefferson Quezada','queza@gmail.com','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-04-29 19:20:27',0,NULL),
-(2,'Jefferson','jeff@gmail.com','$2y$10$WZEM1sOVkMYcDDS/0Guise074xuFErWSk/F9.9NpLH6KIo1oWODKO','estudiante','2025-05-01 19:42:18',0,NULL),
-(3,'Administrador','admin@gmail.com','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','admin','2025-05-07 20:22:31',0,NULL),
-(4,'Maybeline Rosmeri','rosmery@gmail.com','$2y$10$dopf67l5whiqnioIrap.T.R6Z2QmLETglLu61CuSPo63YaLawV8PW','estudiante','2025-05-08 09:46:43',0,NULL),
-(5,'Carlos Manuel','carlos@gmail.com','$2y$10$8zZ69XIhzPkoOompq73K.ejg9w9VxoHUtCQ1JO0GJZ1w6TD7O8dni','docente','2025-05-08 10:42:02',0,NULL),
-(6,'Jefferson','qjeffer@gmail.com','$2y$10$hhu0MSdfPFiIFml8GS00be1yVdwMK4CQyZQ066Zjm7rbpuqA5EBXy','estudiante','2025-05-17 19:18:15',0,NULL),
-(7,'Jefferson','jq@gmail.com','$2y$10$oFjzSdajaO7Tah6zgE4DUeTDPPwrZtwwz5K3QFsWi1F48U0VmsezS','estudiante','2025-05-21 19:14:35',0,NULL),
-(8,'María García','maria.garcia@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL),
-(9,'Carlos Rodriguez','carlos.rodriguez@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL),
-(10,'Ana López','ana.lopez@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL),
-(11,'Luis Martínez','luis.martinez@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL),
-(12,'Sofia Hernández','sofia.hernandez@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL),
-(13,'Miguel Torres','miguel.torres@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL),
-(14,'Carmen Ruiz','carmen.ruiz@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL),
-(15,'Diego Morales','diego.morales@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL),
-(16,'Isabella Cruz','isabella.cruz@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL),
-(17,'Andrés Vega','andres.vega@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL),
-(18,'Carlos','carlos@gail.com','$2y$10$nVUNjMmwOVeLoTOZifj9meJOhoDXPzf/CC.Vz7VIOOPu/zWI4bM1S','estudiante','2025-05-25 09:46:29',0,NULL),
-(19,'Jefferson','jquezada@gmail.com','$2y$10$biCK4.f.KWSqXkAXrSuDnuvGDqFOXLfYIpWsKvejTI61WQxX6mn4u','estudiante','2025-06-05 09:06:59',0,NULL),
-(20,'Jefferson Quezada','jefferson@docente.com','$2y$10$6f9oKlSYhTenKyY1UErHy.h/1hHxMpSp.OK/WICKaX8b77gKcRmK.','docente','2025-06-07 11:28:32',0,NULL),
-(21,'Stuar','stuar@gmail.com','$2y$10$LW.6GoKaqMzlNZO8upE1COTQog3vLN9N.XpV0RiYACKes3K7ZWGWK','estudiante','2025-06-08 20:17:29',0,NULL),
-(22,'Juan Martinez','juamar0125@estudiante.edu','$2y$10$ZPpTJ6K263qSRZYzYHMWFenvol6AqvARD6PeY5N/k55GkpTfWQuIu','estudiante','2025-06-10 13:59:08',0,NULL);
+insert  into `usuarios`(`id_usuario`,`nombre`,`correo`,`contrasena`,`rol`,`fecha_registro`,`primer_login`,`mfa_codigo`,`token_recuperacion`,`token_expira`) values 
+(1,'Jefferson Quezada','queza@gmail.com','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-04-29 19:20:27',0,NULL,NULL,NULL),
+(2,'Jefferson','jeff@gmail.com','$2y$10$WZEM1sOVkMYcDDS/0Guise074xuFErWSk/F9.9NpLH6KIo1oWODKO','estudiante','2025-05-01 19:42:18',0,NULL,'4dbb542a8efcbb6fa5b8d2e6a3714216691742e3cdaedbf157f33df029131c71','2025-06-11 20:58:39'),
+(3,'Administrador','admin@gmail.com','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','admin','2025-05-07 20:22:31',0,NULL,NULL,NULL),
+(4,'Maybeline Rosmeri','rosmery@gmail.com','$2y$10$dopf67l5whiqnioIrap.T.R6Z2QmLETglLu61CuSPo63YaLawV8PW','estudiante','2025-05-08 09:46:43',0,NULL,NULL,NULL),
+(5,'Carlos Manuel','carlos@gmail.com','$2y$10$8zZ69XIhzPkoOompq73K.ejg9w9VxoHUtCQ1JO0GJZ1w6TD7O8dni','docente','2025-05-08 10:42:02',0,NULL,NULL,NULL),
+(6,'Jefferson','qjeffer@gmail.com','$2y$10$hhu0MSdfPFiIFml8GS00be1yVdwMK4CQyZQ066Zjm7rbpuqA5EBXy','estudiante','2025-05-17 19:18:15',0,NULL,NULL,NULL),
+(7,'Jefferson','jq@gmail.com','$2y$10$oFjzSdajaO7Tah6zgE4DUeTDPPwrZtwwz5K3QFsWi1F48U0VmsezS','estudiante','2025-05-21 19:14:35',0,NULL,NULL,NULL),
+(8,'María García','maria.garcia@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(9,'Carlos Rodriguez','carlos.rodriguez@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(10,'Ana López','ana.lopez@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(11,'Luis Martínez','luis.martinez@escuela.edu','$2y$10$HycAleooD1VVOxcKDrBuMe3cJLGSAPXkyoog9tAUf6l7AJUfCHTE.','docente','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(12,'Sofia Hernández','sofia.hernandez@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(13,'Miguel Torres','miguel.torres@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(14,'Carmen Ruiz','carmen.ruiz@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(15,'Diego Morales','diego.morales@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(16,'Isabella Cruz','isabella.cruz@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(17,'Andrés Vega','andres.vega@estudiante.edu','$2y$10$5mWn7rj3y3t7Hh9pDocRp.U.twOmQI1o..wydq/mNQyc7Fv1AoB9y','estudiante','2025-05-21 19:30:52',0,NULL,NULL,NULL),
+(18,'Carlos','carlos@gail.com','$2y$10$nVUNjMmwOVeLoTOZifj9meJOhoDXPzf/CC.Vz7VIOOPu/zWI4bM1S','estudiante','2025-05-25 09:46:29',0,NULL,NULL,NULL),
+(19,'Jefferson','jquezada@gmail.com','$2y$10$biCK4.f.KWSqXkAXrSuDnuvGDqFOXLfYIpWsKvejTI61WQxX6mn4u','estudiante','2025-06-05 09:06:59',0,NULL,NULL,NULL),
+(20,'Jefferson Quezada','jefferson@docente.com','$2y$10$6f9oKlSYhTenKyY1UErHy.h/1hHxMpSp.OK/WICKaX8b77gKcRmK.','docente','2025-06-07 11:28:32',0,NULL,NULL,NULL),
+(21,'Stuar','stuar@gmail.com','$2y$10$LW.6GoKaqMzlNZO8upE1COTQog3vLN9N.XpV0RiYACKes3K7ZWGWK','estudiante','2025-06-08 20:17:29',0,NULL,'4ffa1997b1f2b38993a0b9d33bf072cd801042f6b31598535ce3048df7e4d86b','2025-06-11 20:58:28'),
+(22,'Juan Martinez','juamar0125@estudiante.edu','$2y$10$ZPpTJ6K263qSRZYzYHMWFenvol6AqvARD6PeY5N/k55GkpTfWQuIu','estudiante','2025-06-10 13:59:08',0,NULL,NULL,NULL),
+(23,'Jefferson Quezada','jefque0125@edutech.academy.edu.sv','$2y$10$eDKDu4HeudBv0qxxmocaVOieFLjBlYL6kg3MDHe/D6M3n5VJ7Fqf.','estudiante','2025-06-11 12:00:36',0,NULL,NULL,NULL),
+(24,'Jefferson Quezada','jefque0225@edutech.academy.edu.sv','$2y$10$8UYqrpL402GIsHkrBx/FkuQN3om3b0fuyqPaM00iL3fWbDzzZuJ5K','estudiante','2025-06-11 12:07:44',1,NULL,NULL,NULL),
+(25,'Jefferson Quezada','jefque0325@edutech.academy.edu.sv','$2y$10$vm2Tb3UXu0OEG1fVAnObLeCSwYwcCeHLvihzhSydq16RbQAqFWQ2C','estudiante','2025-06-11 12:07:58',1,NULL,NULL,NULL),
+(26,'Jefferson Quezada','jefque0425@edutech.academy.edu.sv','$2y$10$Ac.oL0FMubc7o6KzHDu0VujJ2jVfcHfSKZQKCznWq2Hh/2nK.60Uq','estudiante','2025-06-11 12:08:31',1,NULL,NULL,NULL),
+(27,'Jefferson Quezada','jefque0525@edutech.academy.edu.sv','$2y$10$4eWRCHAoJZJTL8UAWyFQyuKZfgyKz.OEoghXr8/rCwAez/OzV1gJW','estudiante','2025-06-11 12:08:48',1,NULL,NULL,NULL),
+(28,'Jefferson Quezada Rodríguez','jefque0625@edutech.academy.edu.sv','$2y$10$nsCWpLubH.8s9FCxuc597OJwl6eIrDL50vLOR.lg5ieO9DX.30ZPG','estudiante','2025-06-11 12:10:22',0,NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
