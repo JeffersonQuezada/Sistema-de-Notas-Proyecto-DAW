@@ -67,6 +67,11 @@ switch ($accion) {
         $controller = new DashboardController();
         $controller->index();
         break;
+    case 'perfil':
+        require_once 'controllers/DashboardController.php';
+        $controller = new DashboardController();
+        $controller->perfil();
+        break;
 }
 ?>
 <?php

@@ -1,3 +1,4 @@
+?>
 <?php include __DIR__ . '/../../includes/header.php'; ?>
 <?php
 $cursos = $cursos ?? [];
@@ -16,11 +17,10 @@ $cursos = $cursos ?? [];
                         <p><strong>Grupo:</strong> <?= $curso['grupo'] ?></p>
                         <?php if ($curso['ya_inscrito']): ?>
                             <span class="badge bg-success">Inscrito</span>
+                            <a href="index.php?accion=desinscribir_curso&id=<?= $curso['id_curso'] ?>" class="btn btn-danger btn-sm mt-2">Desinscribirse</a>
+                            <a href="index.php?accion=actividades&id=<?= $curso['id_curso'] ?>" class="btn btn-info btn-sm mt-2">Ver actividades</a>
                         <?php else: ?>
-                            <form method="POST" action="../controllers/CursoController.php?accion=inscribir">
-                                <input type="hidden" name="id_curso" value="<?= $curso['id_curso'] ?>">
-                                <button class="btn btn-primary btn-sm mt-2">Inscribirse</button>
-                            </form>
+                            <a href="index.php?accion=inscribir_curso&id=<?= $curso['id_curso'] ?>" class="btn btn-primary btn-sm mt-2">Inscribirse</a>
                         <?php endif; ?>
                     </div>
                 </div>

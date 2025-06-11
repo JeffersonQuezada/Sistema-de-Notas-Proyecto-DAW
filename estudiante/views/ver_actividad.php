@@ -1,4 +1,9 @@
-<?php include '../../includes/header.php'; ?>
+<?php
+// ==================================================
+// 5. ACTUALIZAR estudiante/views/ver_actividad.php
+// ==================================================
+?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <div class="container mt-4">
     <div class="card shadow">
@@ -22,7 +27,7 @@
                 ?>
             </p>
             <hr>
-            <?php if ($entrega): ?>
+            <?php if (isset($entrega) && $entrega): ?>
                 <div class="alert alert-success">
                     <strong>¡Ya entregaste esta actividad!</strong><br>
                     <b>Fecha de entrega:</b> <?= date('d/m/Y H:i', strtotime($entrega['fecha_entrega'])) ?><br>
@@ -35,8 +40,7 @@
                     <?php endif; ?>
                 </div>
             <?php elseif ($fecha_limite >= $ahora): ?>
-                <form method="POST" action="../controllers/EntregaController.php?accion=entregar" enctype="multipart/form-data" class="mt-3">
-                    <input type="hidden" name="id_actividad" value="<?= $actividad['id_actividad'] ?>">
+                <form method="POST" action="index.php?accion=entregar_actividad&id=<?= $actividad['id_actividad'] ?>" enctype="multipart/form-data" class="mt-3">
                     <div class="mb-3">
                         <label for="archivo" class="form-label">Subir archivo de entrega</label>
                         <input type="file" name="archivo" id="archivo" class="form-control" required>
@@ -48,9 +52,9 @@
                     <strong>La fecha límite ha pasado y no puedes entregar esta actividad.</strong>
                 </div>
             <?php endif; ?>
-            <a href="actividades_listado.php?id_curso=<?= $actividad['id_curso'] ?>" class="btn btn-secondary mt-3">Volver a actividades</a>
+            <a href="index.php?accion=actividades&id=<?= $actividad['id_curso'] ?>" class="btn btn-secondary mt-3">Volver a actividades</a>
         </div>
     </div>
 </div>
 
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

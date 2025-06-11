@@ -40,6 +40,8 @@ if (isset($_GET['success'])) {
 }
 ?>
 
+<?php include __DIR__ . '/../../includes/header.php'; ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -357,3 +359,5 @@ if (isset($_GET['success'])) {
     </script>
 </body>
 </html>
+
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

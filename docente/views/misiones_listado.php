@@ -1,4 +1,4 @@
-<?php include '../../includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <div class="container mt-4">
   <h2>Misiones Disponibles</h2>
@@ -8,4 +8,4 @@
   </ul>
 </div>
 
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

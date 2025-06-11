@@ -1,7 +1,8 @@
 <?php include __DIR__ . '/../../includes/header.php'; ?>
+<?php $perfil = $perfil ?? ['nombre'=>'', 'correo'=>'']; ?>
 <div class="container mt-4">
     <h2>Mi Perfil</h2>
-    <form method="POST" action="../controllers/PerfilController.php?accion=actualizar">
+    <form method="POST" action="index.php?accion=actualizar_perfil">
         <div class="mb-3">
             <label>Nombre</label>
             <input type="text" name="nombre" class="form-control" value="<?= htmlspecialchars($perfil['nombre']) ?>" required>

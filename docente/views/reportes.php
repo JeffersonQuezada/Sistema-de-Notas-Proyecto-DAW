@@ -1,3 +1,4 @@
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,3 +21,4 @@
     </form>
 </body>
 </html>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

@@ -35,7 +35,7 @@ if (!$cursoModel->verificarDocenteCurso($id_docente, $actividad['id_curso'])) {
 // Obtener cursos del docente para el select
 $cursos = $cursoModel->listarCursosPorDocente($id_docente);
 
-include '../../includes/header.php';
+include __DIR__ . '/../../includes/header.php';
 ?>
 
 <div class="container mt-5">
@@ -93,4 +93,4 @@ include '../../includes/header.php';
     </div>
 </div>
 
-<?php include '../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

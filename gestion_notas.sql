@@ -288,9 +288,14 @@ CREATE TABLE `insignias` (
   `descripcion` text DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_insignia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `insignias` */
+
+insert  into `insignias`(`id_insignia`,`nombre`,`descripcion`,`imagen`) values 
+(1,'Primera Entrega','Completaste tu primera entrega','badge1.png'),
+(2,'Buen Promedio','Obtuviste un promedio mayor a 8.5','badge2.png'),
+(3,'Puntual','Entregaste 10 actividades a tiempo','badge3.png');
 
 /*Table structure for table `insignias_estudiantes` */
 
@@ -320,9 +325,13 @@ CREATE TABLE `misiones` (
   PRIMARY KEY (`id_mision`),
   KEY `id_grupo` (`id_grupo`),
   CONSTRAINT `misiones_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupos` (`id_grupo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `misiones` */
+
+insert  into `misiones`(`id_mision`,`titulo`,`descripcion`,`recompensa`,`id_grupo`) values 
+(1,'Primeros Pasos','Completa tu primer curso','100 puntos',NULL),
+(2,'Estrella Naciente','Obtén una calificación de 90+','150 puntos',NULL);
 
 /*Table structure for table `misiones_estudiantes` */
 
@@ -332,6 +341,7 @@ CREATE TABLE `misiones_estudiantes` (
   `id_mision` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `completado` tinyint(1) DEFAULT NULL,
+  `fecha_aceptacion` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_mision`,`id_usuario`),
   KEY `id_usuario` (`id_usuario`),
   CONSTRAINT `misiones_estudiantes_ibfk_1` FOREIGN KEY (`id_mision`) REFERENCES `misiones` (`id_mision`),
@@ -349,6 +359,7 @@ CREATE TABLE `notas` (
   `id_estudiante` int(11) NOT NULL,
   `id_curso` int(11) NOT NULL,
   `id_actividad` int(11) NOT NULL,
+  `id_entrega` int(11) DEFAULT NULL,
   `nota` decimal(5,2) NOT NULL,
   `observaciones` varchar(255) DEFAULT NULL,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -356,6 +367,8 @@ CREATE TABLE `notas` (
   KEY `id_estudiante` (`id_estudiante`),
   KEY `id_curso` (`id_curso`),
   KEY `notas_ibfk_3` (`id_actividad`),
+  KEY `fk_entrega` (`id_entrega`),
+  CONSTRAINT `fk_entrega` FOREIGN KEY (`id_entrega`) REFERENCES `entregas` (`id_entrega`),
   CONSTRAINT `notas_ibfk_1` FOREIGN KEY (`id_estudiante`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
   CONSTRAINT `notas_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE,
   CONSTRAINT `notas_ibfk_3` FOREIGN KEY (`id_actividad`) REFERENCES `actividades` (`id_actividad`) ON DELETE CASCADE
@@ -363,37 +376,37 @@ CREATE TABLE `notas` (
 
 /*Data for the table `notas` */
 
-insert  into `notas`(`id_nota`,`id_estudiante`,`id_curso`,`id_actividad`,`nota`,`observaciones`,`fecha_registro`) values 
-(1,1,1,1,85.50,'Buen desempeño','2025-05-21 19:26:21'),
-(2,1,1,1,85.50,'Buen desempeño en álgebra','2025-05-21 19:30:52'),
-(3,1,1,2,92.00,'Excelentes ejercicios resueltos','2025-05-21 19:30:52'),
-(4,1,3,6,78.75,'Necesita mejorar en laboratorio','2025-05-21 19:30:52'),
-(5,1,5,11,88.00,'Código bien estructurado','2025-05-21 19:30:52'),
-(6,1,5,13,91.50,'Excelente dominio de Python','2025-05-21 19:30:52'),
-(7,2,2,4,76.25,'Rendimiento promedio','2025-05-21 19:30:52'),
-(8,2,2,5,83.50,'Mejora progresiva','2025-05-21 19:30:52'),
-(9,2,4,9,89.00,'Muy buen conocimiento teórico','2025-05-21 19:30:52'),
-(10,2,6,14,87.75,'Buenas prácticas de programación','2025-05-21 19:30:52'),
-(11,5,1,1,94.00,'Excelente comprensión matemática','2025-05-21 19:30:52'),
-(12,5,1,2,96.50,'Trabajo excepcional','2025-05-21 19:30:52'),
-(13,5,7,15,91.00,'Análisis histórico profundo','2025-05-21 19:30:52'),
-(14,5,8,17,93.25,'Excelente interpretación literaria','2025-05-21 19:30:52'),
-(15,6,2,4,82.00,'Buen rendimiento general','2025-05-21 19:30:52'),
-(16,6,3,6,85.50,'Mejora en práctica de laboratorio','2025-05-21 19:30:52'),
-(17,6,5,11,79.25,'Necesita práctica adicional','2025-05-21 19:30:52'),
-(18,7,4,9,92.75,'Excelente en química teórica','2025-05-21 19:30:52'),
-(19,7,4,10,88.50,'Buena técnica de laboratorio','2025-05-21 19:30:52'),
-(20,7,7,15,86.00,'Buen análisis histórico','2025-05-21 19:30:52'),
-(21,7,1,1,90.25,'Sólidos conocimientos matemáticos','2025-05-21 19:30:52'),
-(22,8,5,11,95.00,'Programador excepcional','2025-05-21 19:30:52'),
-(23,8,5,13,97.50,'Dominio avanzado del lenguaje','2025-05-21 19:30:52'),
-(24,8,3,6,84.00,'Buen trabajo experimental','2025-05-21 19:30:52'),
-(25,9,8,17,89.75,'Buena comprensión literaria','2025-05-21 19:30:52'),
-(26,9,7,15,92.50,'Excelente perspectiva histórica','2025-05-21 19:30:52'),
-(27,9,2,4,81.25,'Rendimiento satisfactorio','2025-05-21 19:30:52'),
-(28,10,1,1,87.50,'Buen nivel matemático','2025-05-21 19:30:52'),
-(29,10,4,9,90.00,'Sólidos fundamentos químicos','2025-05-21 19:30:52'),
-(30,10,6,14,86.25,'Buenas habilidades de programación','2025-05-21 19:30:52');
+insert  into `notas`(`id_nota`,`id_estudiante`,`id_curso`,`id_actividad`,`id_entrega`,`nota`,`observaciones`,`fecha_registro`) values 
+(1,1,1,1,NULL,85.50,'Buen desempeño','2025-05-21 19:26:21'),
+(2,1,1,1,NULL,85.50,'Buen desempeño en álgebra','2025-05-21 19:30:52'),
+(3,1,1,2,NULL,92.00,'Excelentes ejercicios resueltos','2025-05-21 19:30:52'),
+(4,1,3,6,NULL,78.75,'Necesita mejorar en laboratorio','2025-05-21 19:30:52'),
+(5,1,5,11,NULL,88.00,'Código bien estructurado','2025-05-21 19:30:52'),
+(6,1,5,13,NULL,91.50,'Excelente dominio de Python','2025-05-21 19:30:52'),
+(7,2,2,4,NULL,76.25,'Rendimiento promedio','2025-05-21 19:30:52'),
+(8,2,2,5,NULL,83.50,'Mejora progresiva','2025-05-21 19:30:52'),
+(9,2,4,9,NULL,89.00,'Muy buen conocimiento teórico','2025-05-21 19:30:52'),
+(10,2,6,14,NULL,87.75,'Buenas prácticas de programación','2025-05-21 19:30:52'),
+(11,5,1,1,NULL,94.00,'Excelente comprensión matemática','2025-05-21 19:30:52'),
+(12,5,1,2,NULL,96.50,'Trabajo excepcional','2025-05-21 19:30:52'),
+(13,5,7,15,NULL,91.00,'Análisis histórico profundo','2025-05-21 19:30:52'),
+(14,5,8,17,NULL,93.25,'Excelente interpretación literaria','2025-05-21 19:30:52'),
+(15,6,2,4,NULL,82.00,'Buen rendimiento general','2025-05-21 19:30:52'),
+(16,6,3,6,NULL,85.50,'Mejora en práctica de laboratorio','2025-05-21 19:30:52'),
+(17,6,5,11,NULL,79.25,'Necesita práctica adicional','2025-05-21 19:30:52'),
+(18,7,4,9,NULL,92.75,'Excelente en química teórica','2025-05-21 19:30:52'),
+(19,7,4,10,NULL,88.50,'Buena técnica de laboratorio','2025-05-21 19:30:52'),
+(20,7,7,15,NULL,86.00,'Buen análisis histórico','2025-05-21 19:30:52'),
+(21,7,1,1,NULL,90.25,'Sólidos conocimientos matemáticos','2025-05-21 19:30:52'),
+(22,8,5,11,NULL,95.00,'Programador excepcional','2025-05-21 19:30:52'),
+(23,8,5,13,NULL,97.50,'Dominio avanzado del lenguaje','2025-05-21 19:30:52'),
+(24,8,3,6,NULL,84.00,'Buen trabajo experimental','2025-05-21 19:30:52'),
+(25,9,8,17,NULL,89.75,'Buena comprensión literaria','2025-05-21 19:30:52'),
+(26,9,7,15,NULL,92.50,'Excelente perspectiva histórica','2025-05-21 19:30:52'),
+(27,9,2,4,NULL,81.25,'Rendimiento satisfactorio','2025-05-21 19:30:52'),
+(28,10,1,1,NULL,87.50,'Buen nivel matemático','2025-05-21 19:30:52'),
+(29,10,4,9,NULL,90.00,'Sólidos fundamentos químicos','2025-05-21 19:30:52'),
+(30,10,6,14,NULL,86.25,'Buenas habilidades de programación','2025-05-21 19:30:52');
 
 /*Table structure for table `notificaciones` */
 

@@ -1,16 +1,20 @@
 <?php
-require_once __DIR__ . '/../models/InsigniaModel.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+require_once '../models/InsigniaModel.php';
 
 class InsigniaController {
     private $insigniaModel;
+    
     public function __construct() {
         $this->insigniaModel = new InsigniaModel();
     }
+    
     public function mostrarInsignias() {
         $id_estudiante = $_SESSION['id_usuario'];
-        $insignias = $this->insigniaModel->listarInsigniasPorEstudiante($id_estudiante);
+        $insignias = $this->insigniaModel->obtenerInsigniasPorEstudiante($id_estudiante);
+        $insignias_disponibles = $this->insigniaModel->obtenerInsigniasDisponibles();
+        
         include '../views/insignias.php';
     }
 }
+
 ?>
