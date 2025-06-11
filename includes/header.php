@@ -1,21 +1,36 @@
 <?php
-// Iniciar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Definir BASE_URL de forma robusta
 if (!defined('BASE_URL')) {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
     $host = $_SERVER['HTTP_HOST'];
-    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
-    $parts = explode('/', trim($scriptName, '/'));
-    $modulo = in_array($parts[0], ['estudiante', 'docente', 'admin']) ? $parts[0] : '';
-    $baseUrl = $modulo ? "/$modulo/" : '/';
-    define('BASE_URL', $protocol . $host . $baseUrl);
+    
+    // Detectar el directorio base del proyecto
+    $scriptPath = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+    $pathParts = explode('/', trim($scriptPath, '/'));
+    
+    // Buscar si estamos en un módulo (docente, estudiante, admin)
+    $modulos = ['docente', 'estudiante', 'admin'];
+    $currentDir = '';
+    
+    foreach ($pathParts as $part) {
+        if (in_array($part, $modulos)) {
+            $currentDir = $part;
+            break;
+        }
+    }
+    
+    if ($currentDir) {
+        $baseUrl = $protocol . $host . '/' . implode('/', array_slice($pathParts, 0, array_search($currentDir, $pathParts) + 1)) . '/';
+    } else {
+        $baseUrl = $protocol . $host . $scriptPath . '/';
+    }
+    
+    define('BASE_URL', $baseUrl);
 }
 
-// Definir el título de la página si no está definido
 if (!isset($pageTitle)) {
     $pageTitle = 'Sistema Académico';
 }
