@@ -1,5 +1,4 @@
 <?php
-include __DIR__ . '/../views/misiones.php';
 require_once __DIR__ . '/../models/MisionModel.php';
 require_once __DIR__ . '/../models/EntregaModel.php'; // Asegúrate de incluir el modelo de entrega
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -20,7 +19,7 @@ class MisionController {
         // Obtén el promedio general del estudiante
         $promedio = $this->entregaModel->obtenerPromedioGeneral($id_estudiante);
 
-        include '../views/misiones.php';
+        include __DIR__ . '/../views/misiones.php';
     }
 
     public function aceptar($id_mision) {

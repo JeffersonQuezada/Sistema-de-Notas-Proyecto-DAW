@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/NotaModel.php';
+require_once __DIR__ . '/../models/InsigniaModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 class NotaController {
@@ -20,7 +21,7 @@ class NotaController {
         $promedios = $this->notaModel->calcularPromediosPorCurso($id_estudiante);
         $promedio_general = $this->notaModel->calcularPromedioGeneral($id_estudiante);
         
-        include '../views/mis_notas.php';
+        include __DIR__ . '/../views/mis_notas.php';
     }
 }
 ?>

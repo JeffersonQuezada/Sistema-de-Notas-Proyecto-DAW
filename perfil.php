@@ -69,4 +69,6 @@ try {
     </div>
 </div>
 
+<?php if (!empty($mensaje)) echo "<div style='background:#fff;color:#000;padding:10px;'>$mensaje</div>"; ?>
+
 <?php include __DIR__ . '/includes/footer.php'; ?>

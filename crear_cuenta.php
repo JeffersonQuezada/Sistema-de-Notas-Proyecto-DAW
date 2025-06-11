@@ -1,8 +1,9 @@
 <?php
 include 'includes/conexion.php'; // Incluimos el archivo de conexión PDO
+session_start(); // Iniciar sesión para guardar las credenciales
 
 // Inicializamos variables para los datos del formulario y mensajes de error
-$nombre = $apellido = $contrasena = "";
+$nombre = $apellido = "";
 $error = "";
 $success = "";
 $correo_generado = "";
@@ -26,7 +27,7 @@ function generarCorreo($nombre, $apellido, $pdo) {
     // Buscar el siguiente número disponible
     $numero = 1;
     do {
-        $correo = $base_correo . sprintf('%02d', $numero) . $año_actual . '@estudiante.edu';
+        $correo = $base_correo . sprintf('%02d', $numero) . $año_actual . '@edutech.academy.edu.sv';
         
         // Verificar si el correo ya existe
         $stmt = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE correo = :correo");
@@ -56,32 +57,43 @@ function eliminarAcentos($cadena) {
     return strtr($cadena, $acentos);
 }
 
+// Función para generar una contraseña aleatoria segura
+function generarContrasena($longitud = 8) {
+    $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
+    $contrasena = '';
+    for ($i = 0; $i < $longitud; $i++) {
+        $contrasena .= $caracteres[random_int(0, strlen($caracteres) - 1)];
+    }
+    return $contrasena;
+}
+
 // Procesamos el envío del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtenemos y sanitizamos los datos del formulario
     $nombre = trim($_POST["nombre"]);
     $apellido = trim($_POST["apellido"]);
-    $contrasena = trim($_POST["contrasena"]);
-    
+    // $contrasena = trim($_POST["contrasena"]); // Ya no se pide al usuario
+
     // Validación básica
-    if (empty($nombre) || empty($apellido) || empty($contrasena)) {
+    if (empty($nombre) || empty($apellido)) {
         $error = "Todos los campos son obligatorios";
-    } elseif (strlen($contrasena) < 6) {
-        $error = "La contraseña debe tener al menos 6 caracteres";
     } else {
         try {
             // Generar correo automáticamente
             $correo_generado = generarCorreo($nombre, $apellido, $pdo);
-            
+
             if (!$correo_generado) {
                 $error = "No se pudo generar un correo único. Intente más tarde.";
             } else {
+                // Generar contraseña automáticamente
+                $contrasena_generada = generarContrasena(10);
+
                 // Encriptamos la contraseña
-                $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
-                
+                $hashed_password = password_hash($contrasena_generada, PASSWORD_DEFAULT);
+
                 // Establecemos el rol por defecto como 'estudiante'
                 $rol = 'estudiante';
-                
+
                 // Insertamos el usuario en la base de datos con primer_login = 1
                 $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, correo, contrasena, rol, primer_login) VALUES (:nombre, :correo, :contrasena, :rol, 1)");
                 $stmt->execute([
@@ -90,11 +102,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'contrasena' => $hashed_password,
                     'rol' => $rol
                 ]);
-                
+
                 if ($stmt->rowCount() > 0) {
-                    $success = "¡Cuenta creada exitosamente!<br><strong>Tu correo generado es:</strong> " . $correo_generado . "<br>Guarda este correo para iniciar sesión.";
+                    $success = "¡Cuenta creada exitosamente!<br><strong>Tu correo generado es:</strong> " . $correo_generado . "<br><strong>Tu contraseña temporal es:</strong> " . $contrasena_generada . "<br>Guarda estas credenciales para iniciar sesión.";
+
+                    // Guardar credenciales en un archivo TXT
+                    $credenciales = "Correo: $correo_generado\nContraseña: $contrasena_generada\n\n";
+                    file_put_contents(__DIR__ . '/credenciales_creadas.txt', $credenciales, FILE_APPEND);
+
+                    // Guardar credenciales en la sesión para la descarga
+                    $_SESSION['credenciales_descarga'] = [
+                        'correo' => $correo_generado,
+                        'contrasena' => $contrasena_generada
+                    ];
+
                     // Reseteamos los campos después de un registro exitoso
-                    $nombre = $apellido = $contrasena = "";
+                    $nombre = $apellido = "";
                 } else {
                     $error = "Error al crear la cuenta.";
                 }
@@ -172,18 +195,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <label class="form-label" for="apellido">Apellido</label>
                 </div>
 
-                <div class="form-outline mb-4">
-                  <input type="password" id="contrasena" name="contrasena" class="form-control form-control-lg" required />
-                  <label class="form-label" for="contrasena">Contraseña (mínimo 6 caracteres)</label>
-                </div>
-
                 <div class="alert alert-info" role="alert">
                     <i class="fas fa-info-circle"></i>
                     <strong>Nota:</strong> Tu correo electrónico se generará automáticamente basado en tu nombre y apellido.
-                    <br><small>Formato: [3 letras nombre][3 letras apellido][número][año]@estudiante.edu</small>
+                    <br><small>Formato: [3 letras nombre][3 letras apellido][número][año]@edutech.academy.edu.sv</small>
                 </div>
 
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Registrarse</button>
+
+                <?php if (isset($_SESSION['credenciales_descarga'])): ?>
+                    <a href="descargar_credenciales.php" class="btn btn-success mt-3" download>
+                        <i class="fas fa-download"></i> Descargar credenciales
+                    </a>
+                <?php endif; ?>
 
                 <hr class="my-4">
                 

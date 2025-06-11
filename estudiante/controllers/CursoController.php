@@ -25,16 +25,28 @@ class CursoController {
             header("Location: ../login.php");
             exit();
         }
-        
-        $id_estudiante = $_SESSION['id_usuario'];
-        $resultado = $this->cursoModel->inscribirEstudiante($id_estudiante, $id_curso);
-        
-        if ($resultado) {
-            header("Location: ../index.php?accion=cursos&success=1");
-        } else {
-            header("Location: ../index.php?accion=cursos&error=1");
+
+        $curso = $this->cursoModel->obtenerCursoPorId($id_curso);
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $contrasena = $_POST['contrasena'] ?? '';
+            // Verifica la contraseña (usa password_verify si está hasheada)
+            if (password_verify($contrasena, $curso['contrasena'])) {
+                $id_estudiante = $_SESSION['id_usuario'];
+                $resultado = $this->cursoModel->inscribirEstudiante($id_estudiante, $id_curso);
+                if ($resultado) {
+                    header("Location: ../index.php?accion=mis_cursos&success=1");
+                    exit();
+                } else {
+                    $error = "No se pudo inscribir al curso.";
+                }
+            } else {
+                $error = "Contraseña incorrecta.";
+            }
         }
-        exit();
+
+        include __DIR__ . '/../views/inscribir_curso.php';
     }
     
     public function desinscribir($id_curso) {

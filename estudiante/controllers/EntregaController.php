@@ -32,7 +32,7 @@ class EntregaController {
         $ruta = '../../uploads/' . $nombreArchivo;
         
         if (move_uploaded_file($archivo['tmp_name'], $ruta)) {
-            $this->entregaModel->entregarActividad($id_estudiante, $id_actividad, $nombreArchivo);
+            $this->entregaModel->entregarActividad($id_actividad, $id_estudiante, $nombreArchivo, null);
             header("Location: ../index.php?accion=mis_entregas&success=1");
         } else {
             header("Location: ../index.php?accion=ver_actividad&id=$id_actividad&error=3");
@@ -48,7 +48,18 @@ class EntregaController {
         
         $id_estudiante = $_SESSION['id_usuario'];
         $entregas = $this->entregaModel->obtenerEntregasPorEstudiante($id_estudiante);
-        include __DIR__ . '/../views/mis_entregas.php';;
+        include __DIR__ . '/../views/mis_entregas.php';
+    }
+
+    public function guardarEntrega() {
+        $id_estudiante = $_SESSION['id_usuario'];
+        $id_actividad = $_POST['id_actividad'];
+        $archivo = $_FILES['archivo']['name'];
+        // ...subida de archivo...
+        $comentario = $_POST['comentario'] ?? '';
+        $this->entregaModel->guardarEntrega($id_actividad, $id_estudiante, $archivo, $comentario);
+        header("Location: index.php?accion=mis_entregas&success=1");
+        exit();
     }
 }
 ?>

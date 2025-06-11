@@ -1,5 +1,5 @@
 <?php
-require_once '../models/InsigniaModel.php';
+require_once __DIR__ . '/../models/InsigniaModel.php';
 
 class InsigniaController {
     private $insigniaModel;
@@ -12,8 +12,8 @@ class InsigniaController {
         $id_estudiante = $_SESSION['id_usuario'];
         $insignias = $this->insigniaModel->obtenerInsigniasPorEstudiante($id_estudiante);
         $insignias_disponibles = $this->insigniaModel->obtenerInsigniasDisponibles();
-        
-        include '../views/insignias.php';
+
+        include __DIR__ . '/../views/insignias.php';
     }
 }
 

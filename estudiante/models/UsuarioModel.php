@@ -56,5 +56,20 @@ class UsuarioModel {
         $stmt->execute([$id_usuario]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
+    public function verificarContrasena($id_usuario, $contrasena) {
+        $sql = "SELECT contrasena FROM usuarios WHERE id_usuario = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id_usuario]);
+        $hash = $stmt->fetchColumn();
+        return password_verify($contrasena, $hash);
+    }
+
+    public function actualizarContrasena($id_usuario, $nueva) {
+        $hash = password_hash($nueva, PASSWORD_DEFAULT);
+        $sql = "UPDATE usuarios SET contrasena = ? WHERE id_usuario = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$hash, $id_usuario]);
+    }
 }
 ?>

@@ -10,19 +10,17 @@ class EntregaModel {
     }
     
     public function entregarActividad($id_actividad, $id_estudiante, $archivo, $comentario = null) {
-    $sql = "INSERT INTO entregas (id_actividad, id_estudiante, archivo, comentario) 
-            VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO entregas (id_actividad, id_estudiante, archivo, comentario) VALUES (?, ?, ?, ?)";
     $stmt = $this->pdo->prepare($sql);
     return $stmt->execute([$id_actividad, $id_estudiante, $archivo, $comentario]);
 }
     
   public function obtenerEntregasPorEstudiante($id_estudiante) {
-    $sql = "SELECT e.*, a.nombre as actividad, a.fecha_limite, a.tipo, n.nota, n.observaciones as retroalimentacion
+    $sql = "SELECT e.*, a.nombre AS actividad, a.tipo, a.id_curso, c.nombre_curso
             FROM entregas e
             JOIN actividades a ON e.id_actividad = a.id_actividad
-            LEFT JOIN notas n ON e.id_entrega = n.id_entrega
-            WHERE e.id_estudiante = ?
-            ORDER BY e.fecha_entrega DESC";
+            JOIN cursos c ON a.id_curso = c.id_curso
+            WHERE e.id_estudiante = ?";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([$id_estudiante]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -60,6 +58,13 @@ class EntregaModel {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id_estudiante, $id_estudiante]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function guardarEntrega($id_actividad, $id_estudiante, $archivo, $comentario) {
+        $sql = "INSERT INTO entregas (id_actividad, id_estudiante, archivo, comentario, fecha_entrega)
+                VALUES (?, ?, ?, ?, NOW())";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$id_actividad, $id_estudiante, $archivo, $comentario]);
     }
 }
 ?>

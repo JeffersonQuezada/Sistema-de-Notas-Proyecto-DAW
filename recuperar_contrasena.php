@@ -15,8 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE correo = :correo");
         $stmt->execute(['correo' => $correo]);
         if ($stmt->rowCount() > 0) {
-            // Aquí normalmente enviarías un correo con instrucciones de recuperación
-            $mensaje = "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.";
+            $usuario = $stmt->fetch();
+            $token = bin2hex(random_bytes(32));
+            $expira = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+            // Guarda el token y la expiración
+            $update = $pdo->prepare("UPDATE usuarios SET token_recuperacion = ?, token_expira = ? WHERE id_usuario = ?");
+            $update->execute([$token, $expira, $usuario['id_usuario']]);
+
+            // Prepara el enlace de recuperación
+            $enlace = "http://localhost:3000/restablecer_contrasena.php?token=$token";
+
+            // Mostrar el enlace en pantalla (solo para pruebas locales)
+            $mensaje = "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.<br>
+            <strong>Enlace de recuperación (solo para pruebas locales):</strong><br>
+            <a href='$enlace'>$enlace</a>";
         } else {
             $mensaje = "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.";
         }
@@ -47,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Swal.fire({
                     icon: 'info',
                     title: 'Recuperación',
-                    text: '<?php echo addslashes($mensaje); ?>',
+                    html: '<?php echo addslashes($mensaje); ?>',
                     confirmButtonColor: '#3085d6'
                 });
             });

@@ -46,10 +46,7 @@ class CursoModel {
     }
     
     public function obtenerCursoPorId($id_curso) {
-        $sql = "SELECT c.*, u.nombre AS profesor_nombre 
-                FROM cursos c 
-                LEFT JOIN usuarios u ON c.id_docente = u.id_usuario 
-                WHERE c.id_curso = ?";
+        $sql = "SELECT * FROM cursos WHERE id_curso = ?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id_curso]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

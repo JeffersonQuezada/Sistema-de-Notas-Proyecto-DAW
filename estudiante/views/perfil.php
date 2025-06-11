@@ -1,17 +1,15 @@
 <?php include __DIR__ . '/../../includes/header.php'; ?>
-<?php $perfil = $perfil ?? ['nombre'=>'', 'correo'=>'']; ?>
+
 <div class="container mt-4">
     <h2>Mi Perfil</h2>
-    <form method="POST" action="index.php?accion=actualizar_perfil">
-        <div class="mb-3">
-            <label>Nombre</label>
-            <input type="text" name="nombre" class="form-control" value="<?= htmlspecialchars($perfil['nombre']) ?>" required>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Nombre:</strong> <?= htmlspecialchars($perfil['nombre']) ?></p>
+            <p><strong>Correo:</strong> <?= htmlspecialchars($perfil['correo']) ?></p>
+            <!-- Puedes agregar más campos si lo deseas -->
+            <a href="index.php?accion=cambiar_contrasena" class="btn btn-warning">Cambiar contraseña</a>
         </div>
-        <div class="mb-3">
-            <label>Correo</label>
-            <input type="email" name="correo" class="form-control" value="<?= htmlspecialchars($perfil['correo']) ?>" required>
-        </div>
-        <button class="btn btn-primary">Actualizar</button>
-    </form>
+    </div>
 </div>
+
 <?php include __DIR__ . '/../../includes/footer.php'; ?>

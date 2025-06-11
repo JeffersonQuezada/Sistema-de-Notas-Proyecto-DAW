@@ -17,24 +17,21 @@ class PerfilController {
         
         $id_usuario = $_SESSION['id_usuario'];
         $perfil = $this->usuarioModel->obtenerPerfil($id_usuario);
-        include __DIR__.'/../views/perfil.php';
+        include __DIR__ . '/../views/perfil.php';
     }
-    
-    public function actualizarPerfil($nombre, $correo) {
-        if (!isset($_SESSION['id_usuario'])) {
-            header("Location: ../login.php");
-            exit();
-        }
-        
+
+    public function mostrarFormularioCambioContrasena() {
+        include __DIR__ . '/../views/cambiar_contrasena.php';
+    }
+
+    public function cambiarContrasena($actual, $nueva) {
         $id_usuario = $_SESSION['id_usuario'];
-        $resultado = $this->usuarioModel->actualizarPerfil($id_usuario, $nombre, $correo);
-        
-        if ($resultado) {
-            $_SESSION['nombre'] = $nombre;
-            $_SESSION['correo'] = $correo; // Opcional
+        // Verifica la contraseña actual
+        if ($this->usuarioModel->verificarContrasena($id_usuario, $actual)) {
+            $this->usuarioModel->actualizarContrasena($id_usuario, $nueva);
             header("Location: ../index.php?accion=perfil&success=1");
         } else {
-            header("Location: ../index.php?accion=perfil&error=1");
+            header("Location: ../index.php?accion=cambiar_contrasena&error=1");
         }
         exit();
     }

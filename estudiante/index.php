@@ -107,15 +107,23 @@ switch ($accion) {
         break;
         
     case 'perfil':
-        require_once 'controllers/DashboardController.php';
-        $controller = new DashboardController();
-        $controller->perfil();
-        break;
-        
-    case 'actualizar_perfil':
         require_once 'controllers/PerfilController.php';
         $controller = new PerfilController();
-        $controller->actualizarPerfil($_POST['nombre'], $_POST['correo']);
+        $controller->verPerfil();
+        break;
+        
+
+        
+    case 'cambiar_contrasena':
+        require_once 'controllers/PerfilController.php';
+        $controller = new PerfilController();
+        $controller->mostrarFormularioCambioContrasena();
+        break;
+        
+    case 'guardar_cambio_contrasena':
+        require_once 'controllers/PerfilController.php';
+        $controller = new PerfilController();
+        $controller->cambiarContrasena($_POST['actual'], $_POST['nueva']);
         break;
         
     default:
