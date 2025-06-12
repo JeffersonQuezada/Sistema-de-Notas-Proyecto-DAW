@@ -1,7 +1,7 @@
 <?php
+require_once __DIR__ . '/../models/ActividadModel.php';
+require_once __DIR__ . '/../models/CursoModel.php';
 
-require_once '../models/ActividadModel.php';
-require_once '../models/CursoModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['id_usuario'])) {
@@ -14,7 +14,7 @@ $actividadModel = new ActividadModel();
 $cursoModel = new CursoModel();
 
 if (!isset($_GET['id'])) {
-    header("Location: actividades_listado.php?error=1&msg=Actividad no especificada");
+    header("Location: index.php?accion=actividades&error=1&msg=Actividad no especificada");
     exit();
 }
 
@@ -22,13 +22,13 @@ $id_actividad = $_GET['id'];
 // Obtener datos de la actividad
 $actividad = $actividadModel->obtenerActividadPorId($id_actividad);
 if (!$actividad) {
-    header("Location: actividades_listado.php?error=1&msg=Actividad no encontrada");
+    header("Location: index.php?accion=actividades&error=1&msg=Actividad no encontrada");
     exit();
 }
 
 // Verificar que el curso pertenezca al docente
 if (!$cursoModel->verificarDocenteCurso($id_docente, $actividad['id_curso'])) {
-    header("Location: actividades_listado.php?error=1&msg=No tienes permiso para editar esta actividad");
+    header("Location: index.php?accion=actividades&error=1&msg=No tienes permiso para editar esta actividad");
     exit();
 }
 
@@ -46,7 +46,7 @@ include __DIR__ . '/../../includes/header.php';
                     <h3 class="mb-0"><i class="fa fa-edit"></i> Editar Actividad</h3>
                 </div>
                 <div class="card-body">
-                    <form action="../controllers/guardar_edicion_actividad.php" method="POST">
+                    <form action="index.php?accion=guardar_edicion_actividad" method="POST">
                         <input type="hidden" name="id_actividad" value="<?= $actividad['id_actividad'] ?>">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
@@ -82,7 +82,7 @@ include __DIR__ . '/../../includes/header.php';
                             <button type="submit" class="btn btn-success btn-lg">
                                 <i class="fa fa-save"></i> Guardar Cambios
                             </button>
-                            <a href="actividades_listado.php" class="btn btn-secondary">
+                            <a href="index.php?accion=actividades" class="btn btn-secondary">
                                 <i class="fa fa-arrow-left"></i> Cancelar
                             </a>
                         </div>

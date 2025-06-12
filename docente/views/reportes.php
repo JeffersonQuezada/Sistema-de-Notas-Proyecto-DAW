@@ -23,6 +23,28 @@ include __DIR__ . '/../../includes/header.php';
         </div>
     </div>
 
+    <form id="formReporte" method="GET" action="index.php">
+        <input type="hidden" name="accion" value="generar_reporte">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <select name="id_curso" id="id_curso" class="form-select" required>
+                    <option value="">Seleccione un curso</option>
+                    <?php foreach ($cursos as $curso): ?>
+                        <option value="<?= $curso['id_curso'] ?>"><?= htmlspecialchars($curso['nombre_curso']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-outline-secondary" onclick="exportarReporte('pdf')">
+                    <i class="fas fa-file-pdf me-1"></i>Exportar PDF
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="exportarReporte('excel')">
+                    <i class="fas fa-file-excel me-1"></i>Exportar Excel
+                </button>
+            </div>
+        </div>
+    </form>
+
     <div class="row">
         <!-- Estudiantes en Riesgo -->
         <div class="col-xl-6 col-lg-12">
@@ -149,9 +171,15 @@ include __DIR__ . '/../../includes/header.php';
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 function exportarReporte(tipo) {
-    const url = `index.php?accion=generar_reporte&tipo=${tipo}`;
+    const idCurso = document.getElementById('id_curso').value;
+    if (!idCurso) {
+        alert('Seleccione un curso');
+        return;
+    }
+    const url = `index.php?accion=generar_reporte&tipo=${tipo}&id_curso=${idCurso}`;
     window.open(url, '_blank');
 }
 
@@ -163,10 +191,29 @@ function verDetalleEstudiante(idEstudiante) {
 // Inicializar gráfico (requiere Chart.js)
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('graficoTendencias');
-    if (ctx) {
-        // Aquí puedes agregar un gráfico con Chart.js
-        ctx.getContext('2d').fillText('Gráfico en desarrollo...', 50, 50);
-    }
+    <?php if (isset($estadisticasCumplimiento) && !empty($estadisticasCumplimiento)): ?>
+    const labels = <?= json_encode(array_column($estadisticasCumplimiento, 'nombre')) ?>;
+    const data = <?= json_encode(array_map(function($s) { return $s['entregas_recibidas']; }, $estadisticasCumplimiento)) ?>;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Entregas recibidas',
+                data: data,
+                backgroundColor: 'rgba(37,99,235,0.7)'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+    <?php else: ?>
+    if (ctx) ctx.getContext('2d').fillText('Gráfico en desarrollo...', 50, 50);
+    <?php endif; ?>
 });
 </script>
 

@@ -31,6 +31,24 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', $baseUrl);
 }
 
+// Definir la URL raíz del proyecto (un nivel arriba del módulo actual)
+if (!defined('ROOT_URL')) {
+    $rootUrl = $protocol . $host . '/';
+    if (strpos(BASE_URL, '/docente/') !== false) {
+        $rootUrl = str_replace('/docente/', '/', BASE_URL);
+        $rootUrl = rtrim($rootUrl, '/') . '/';
+    } elseif (strpos(BASE_URL, '/estudiante/') !== false) {
+        $rootUrl = str_replace('/estudiante/', '/', BASE_URL);
+        $rootUrl = rtrim($rootUrl, '/') . '/';
+    } elseif (strpos(BASE_URL, '/admin/') !== false) {
+        $rootUrl = str_replace('/admin/', '/', BASE_URL);
+        $rootUrl = rtrim($rootUrl, '/') . '/';
+    } else {
+        $rootUrl = BASE_URL;
+    }
+    define('ROOT_URL', $rootUrl);
+}
+
 if (!isset($pageTitle)) {
     $pageTitle = 'Sistema Académico';
 }
@@ -50,7 +68,7 @@ if (!isset($pageTitle)) {
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?php echo BASE_URL; ?>">
-            <i class="fas fa-graduation-cap me-2"></i> Sistema Académico
+            <i class="fas fa-graduation-cap me-2"></i> Edutech Academy
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -65,15 +83,15 @@ if (!isset($pageTitle)) {
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>index.php?accion=perfil"><i class="fas fa-user me-2"></i>Perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?php echo dirname(BASE_URL); ?>/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+                        <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>logout.php"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
                     </ul>
                 </li>
                 <?php else: ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo dirname(BASE_URL); ?>/login.php">Iniciar sesión</a>
+                    <a class="nav-link" href="<?php echo ROOT_URL; ?>login.php">Iniciar sesión</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo dirname(BASE_URL); ?>/registro.php">Registrarse</a>
+                    <a class="nav-link" href="<?php echo ROOT_URL; ?>registro.php">Registrarse</a>
                 </li>
                 <?php endif; ?>
             </ul>
@@ -105,8 +123,18 @@ if (!isset($pageTitle)) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php?accion=cursos">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php?accion=cursos_admin">
                             <i class="fas fa-book me-2"></i>Cursos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php?accion=misiones">
+                            <i class="fas fa-flag me-2"></i>Misiones
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php?accion=insignias">
+                            <i class="fas fa-award me-2"></i>Insignias
                         </a>
                     </li>
                     <?php endif; ?>
@@ -142,6 +170,11 @@ if (!isset($pageTitle)) {
                             <i class="fas fa-chart-bar me-2"></i>Reportes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo BASE_URL; ?>index.php?accion=insignias">
+                            <i class="fas fa-award me-2"></i>Insignias
+                        </a>
+                    </li>
                     <?php endif; ?>
                     
                     <?php if ($_SESSION['rol'] == 'estudiante'): ?>
@@ -157,7 +190,7 @@ if (!isset($pageTitle)) {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo BASE_URL; ?>index.php?accion=misiones">
-                            <i class="fas fa-bullseye me-2"></i>Misiones
+                            <i class="fas fa-flag me-2"></i>Misiones
                         </a>
                     </li>
                     <li class="nav-item">

@@ -1,6 +1,8 @@
 <?php
-require_once '../models/CursoModel.php';
-session_start();
+require_once __DIR__ . '/../models/CursoModel.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Verificar sesión
 if (!isset($_SESSION['id_usuario'])) {
@@ -12,32 +14,6 @@ $id_docente = $_SESSION['id_usuario'];
 
 $cursoModel = new CursoModel();
 $cursos = $cursoModel->listarCursosPorDocente($id_docente);
-
-// Mensajes de error o éxito
-$mensaje = '';
-$tipo_mensaje = '';
-
-if (isset($_GET['error'])) {
-    $tipo_mensaje = 'danger';
-    switch ($_GET['error']) {
-        case '1':
-            $mensaje = 'Error al crear la actividad. Intenta nuevamente.';
-            break;
-        case '2':
-            $mensaje = isset($_GET['msg']) ? $_GET['msg'] : 'Todos los campos son obligatorios.';
-            break;
-        case '3':
-            $mensaje = isset($_GET['msg']) ? $_GET['msg'] : 'No tienes permisos para este curso.';
-            break;
-        default:
-            $mensaje = 'Ha ocurrido un error.';
-    }
-}
-
-if (isset($_GET['success'])) {
-    $tipo_mensaje = 'success';
-    $mensaje = isset($_GET['msg']) ? $_GET['msg'] : 'Actividad creada exitosamente.';
-}
 ?>
 
 <?php include __DIR__ . '/../../includes/header.php'; ?>
@@ -60,7 +36,7 @@ if (isset($_GET['success'])) {
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg,rgb(255, 255, 255) 0%,rgb(17, 98, 213) 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -200,12 +176,10 @@ if (isset($_GET['success'])) {
                         </div>
                         
                         <div class="card-body">
-                            <?php if (!empty($mensaje)): ?>
-                                <div class="alert alert-<?= $tipo_mensaje ?> alert-dismissible fade show" role="alert">
-                                    <i class="fas fa-<?= $tipo_mensaje === 'success' ? 'check-circle' : 'exclamation-triangle' ?>"></i>
-                                    <?= htmlspecialchars($mensaje) ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
+                            <?php if (isset($_GET['success'])): ?>
+                                <div class="alert alert-success"><?= htmlspecialchars($_GET['msg'] ?? 'Operación exitosa') ?></div>
+                            <?php elseif (isset($_GET['error'])): ?>
+                                <div class="alert alert-danger"><?= htmlspecialchars($_GET['msg'] ?? 'Ocurrió un error') ?></div>
                             <?php endif; ?>
 
                             <!-- Información de cursos -->
@@ -216,7 +190,7 @@ if (isset($_GET['success'])) {
                                 </div>
                             </div>
 
-                            <form action="../controllers/guardar_actividad.php" method="POST" id="formActividad">
+                            <form action="index.php?accion=guardar_actividad" method="POST" id="formActividad">
                                 <!-- Selector de Curso -->
                                 <div class="mb-4">
                                     <label for="id_curso" class="form-label">
@@ -302,7 +276,7 @@ if (isset($_GET['success'])) {
                                     <button type="submit" class="btn btn-primary btn-lg">
                                         <i class="fas fa-save me-2"></i>Crear Actividad
                                     </button>
-                                    <a href="actividades_listado.php" class="btn btn-secondary">
+                                    <a href="index.php?accion=actividades" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left me-2"></i>Cancelar
                                     </a>
                                 </div>

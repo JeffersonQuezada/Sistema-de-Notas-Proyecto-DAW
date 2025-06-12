@@ -11,8 +11,7 @@ class ActividadModel {
 
     public function crearActividad($nombre, $descripcion, $fecha_limite, $id_curso, $tipo = 'Tarea') {
         try {
-            $sql = "INSERT INTO actividades (nombre, descripcion, fecha_limite, id_curso, tipo) 
-                    VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO actividades (nombre, descripcion, fecha_limite, id_curso, tipo) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$nombre, $descripcion, $fecha_limite, $id_curso, $tipo]);
             return $this->pdo->lastInsertId();

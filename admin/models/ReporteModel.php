@@ -78,4 +78,24 @@ class ReporteModel {
             'actividadesProximas' => $actividadesProximas
         ];
     }
+    
+    public function obtenerReporteUsuarios() {
+        $stmt = $this->pdo->query("SELECT nombre, correo, rol FROM usuarios ORDER BY nombre");
+        return $stmt->fetchAll(\PDO::FETCH_NUM);
+    }
+
+    public function obtenerReporteCursos() {
+        $stmt = $this->pdo->query("
+            SELECT c.nombre_curso, u.nombre AS docente, c.capacidad, c.grupo
+            FROM cursos c
+            JOIN usuarios u ON c.id_docente = u.id_usuario
+            ORDER BY c.nombre_curso
+        ");
+        return $stmt->fetchAll(\PDO::FETCH_NUM);
+    }
+
+    public function obtenerReporteActividades() {
+        $stmt = $this->pdo->query("SELECT nombre, tipo, fecha_limite FROM actividades ORDER BY fecha_limite DESC");
+        return $stmt->fetchAll(\PDO::FETCH_NUM);
+    }
 }

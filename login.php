@@ -1,4 +1,8 @@
+
+
 <?php
+// Debug temporal - remover después
+
 session_start(); // Iniciamos la sesión
 include 'includes/conexion.php'; // Incluimos el archivo de conexión PDO
 

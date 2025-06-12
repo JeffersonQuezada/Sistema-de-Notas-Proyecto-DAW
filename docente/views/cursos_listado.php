@@ -27,7 +27,7 @@ include __DIR__ . '/../../includes/header.php';
                 <div class="card h-100">
                     <div class="card-header bg-primary text-white">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="card-title mb-0"><?php echo htmlspecialchars($curso['nombre']); ?></h6>
+                            <h6 class="card-title mb-0"><?php echo htmlspecialchars($curso['nombre_curso']); ?></h6>
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="dropdown">
                                     <i class="fas fa-ellipsis-v"></i>

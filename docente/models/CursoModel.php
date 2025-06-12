@@ -52,22 +52,23 @@ class CursoModel {
     }
 
     public function listarCursosPorDocente($id_docente) {
-        try {
-            $sql = "SELECT c.*, 
-                   COUNT(DISTINCT ec.id_estudiante) as total_estudiantes,
-                   COUNT(DISTINCT a.id_actividad) as total_actividades
-                   FROM cursos c 
-                   LEFT JOIN estudiantes_cursos ec ON c.id_curso = ec.id_curso
-                   LEFT JOIN actividades a ON c.id_curso = a.id_curso
-                   WHERE c.id_docente = ?
-                   GROUP BY c.id_curso";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([$id_docente]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error al listar cursos por docente: " . $e->getMessage());
-            return [];
-        }
+        $sql = "
+            SELECT 
+                c.id_curso,
+                c.nombre_curso,
+                c.descripcion,
+                (SELECT COUNT(*) FROM estudiantes_cursos ec WHERE ec.id_curso = c.id_curso) AS total_estudiantes,
+                (SELECT COUNT(*) FROM actividades a WHERE a.id_curso = c.id_curso) AS total_actividades,
+                (SELECT COUNT(*) FROM actividades a 
+                    LEFT JOIN entregas e ON a.id_actividad = e.id_actividad
+                    WHERE a.id_curso = c.id_curso AND e.id_entrega IS NULL
+                ) AS entregas_pendientes
+            FROM cursos c
+            WHERE c.id_docente = ?
+        ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id_docente]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function listarCursosPorEstudiante($id_estudiante) {

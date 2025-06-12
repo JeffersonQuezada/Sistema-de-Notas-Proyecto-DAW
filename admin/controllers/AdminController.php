@@ -10,8 +10,18 @@ class AdminController {
     }
     
     public function mostrarDashboard() {
-        $estadisticas = $this->model->obtenerEstadisticas();
+        $model = new AdminModel();
+        $estadisticas = $model->obtenerEstadisticasDashboard();
+
+        // Obtener todos los cursos para el filtro
+        $cursos = $model->obtenerTodosLosCursos();
+
+        // Filtro por curso
+        $cursoFiltrado = $_GET['curso'] ?? '';
+        $estadisticas['mejoresAlumnos'] = $model->mejoresAlumnosPorCurso(5, $cursoFiltrado);
+
+        $estadisticas['docentesCumplimiento'] = $model->docentesCumplimientoTareas();
         $view = new DashboardView();
-        $view->mostrar($estadisticas);
+        $view->mostrar($estadisticas, $cursos);
     }
 }

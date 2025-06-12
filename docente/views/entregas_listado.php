@@ -6,18 +6,24 @@
     <thead>
       <tr>
         <th>Estudiante</th>
+        <th>Actividad</th>
         <th>Archivo</th>
-        <th>Fecha</th>
-        <th>Comentario</th>
+        <th>Fecha Entrega</th>
       </tr>
     </thead>
     <tbody>
+      <?php foreach ($entregas as $entrega): ?>
       <tr>
-        <td>Juan Pérez</td>
-        <td><a href="#">ver archivo</a></td>
-        <td>2025-06-05</td>
-        <td>Bien hecho</td>
+        <td><?= htmlspecialchars($entrega['estudiante']) ?></td>
+        <td><?= htmlspecialchars($entrega['actividad']) ?></td>
+        <td>
+          <?php if (!empty($entrega['archivo'])): ?>
+            <a href="../../uploads/<?= urlencode($entrega['archivo']) ?>" target="_blank">Descargar</a>
+          <?php endif; ?>
+        </td>
+        <td><?= htmlspecialchars($entrega['fecha_entrega']) ?></td>
       </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 </div>

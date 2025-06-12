@@ -26,6 +26,14 @@ class InsigniaModel {
         }
     }
     
+    public function obtenerPorUsuario($id_usuario) {
+        $stmt = $this->pdo->prepare("SELECT i.* FROM insignias i
+            JOIN insignias_estudiantes ie ON i.id_insignia = ie.id_insignia
+            WHERE ie.id_usuario = ?");
+        $stmt->execute([$id_usuario]);
+        return $stmt->fetchAll();
+    }
+    
     private function determinarTablaInsignias() {
         // Verificamos qué tabla existe
         $tablas = ['estudiante_insignia', 'insignias_estudiantes', 'usuario_insignia'];

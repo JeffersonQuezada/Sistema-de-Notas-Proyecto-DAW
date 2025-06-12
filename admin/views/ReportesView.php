@@ -7,7 +7,16 @@ class ReportesView {
         
         <div class="container mt-4">
             <h2>Reportes del Sistema</h2>
-            
+            <!-- Botones de exportar PDF para cada reporte -->
+            <a href="index.php?accion=exportar_reporte_pdf&tipo=usuarios" class="btn btn-danger mb-3 me-2" target="_blank">
+                <i class="fas fa-file-pdf"></i> Exportar PDF de Usuarios
+            </a>
+            <a href="index.php?accion=exportar_reporte_pdf&tipo=cursos" class="btn btn-danger mb-3 me-2" target="_blank">
+                <i class="fas fa-file-pdf"></i> Exportar PDF de Cursos
+            </a>
+            <a href="index.php?accion=exportar_reporte_pdf&tipo=actividades" class="btn btn-danger mb-3" target="_blank">
+                <i class="fas fa-file-pdf"></i> Exportar PDF de Actividades
+            </a>
             <div class="row mt-4">
                 <div class="col-md-4">
                     <div class="card">
@@ -175,7 +184,18 @@ class ReportesView {
                     <i class="fas fa-arrow-left"></i> Volver
                 </a>
             </div>
-            
+            <!-- Para actividades -->
+            <a href="index.php?accion=exportar_reporte_pdf&tipo=actividades" class="btn btn-danger mb-3" target="_blank">
+                <i class="fas fa-file-pdf"></i> Exportar PDF
+            </a>
+            <!-- Para usuarios -->
+            <a href="index.php?accion=exportar_reporte_pdf&tipo=usuarios" class="btn btn-danger mb-3" target="_blank">
+                <i class="fas fa-file-pdf"></i> Exportar PDF
+            </a>
+            <!-- Para cursos -->
+            <a href="index.php?accion=exportar_reporte_pdf&tipo=cursos" class="btn btn-danger mb-3" target="_blank">
+                <i class="fas fa-file-pdf"></i> Exportar PDF
+            </a>
             <div class="row">
                 <div class="col-md-6">
                     <h4>Actividades por Tipo</h4>

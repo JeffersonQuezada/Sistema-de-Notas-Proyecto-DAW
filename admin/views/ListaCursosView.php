@@ -23,6 +23,14 @@ class ListaCursosView {
                 <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
             
+            <form method="GET" action="index.php" class="mb-3">
+                <input type="hidden" name="accion" value="cursos_admin">
+                <div class="input-group">
+                    <input type="text" name="busqueda" class="form-control" placeholder="Buscar curso o docente" value="<?= htmlspecialchars($_GET['busqueda'] ?? '') ?>">
+                    <button class="btn btn-primary" type="submit">Buscar</button>
+                </div>
+            </form>
+            
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
@@ -44,10 +52,7 @@ class ListaCursosView {
                             <td><?= $curso['capacidad'] ?></td>
                             <td><?= $curso['grupo'] ?? '-' ?></td>
                             <td>
-                                <a href="index.php?accion=editar_curso&id=<?= $curso['id_curso'] ?>" 
-                                   class="btn btn-sm btn-warning" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <a href="index.php?accion=editar_curso&id=<?= $curso['id_curso'] ?>" class="btn btn-sm btn-warning">Editar</a>
                                 <a href="index.php?accion=eliminar_curso&id=<?= $curso['id_curso'] ?>" 
                                    class="btn btn-sm btn-danger" title="Eliminar"
                                    onclick="return confirm('¿Estás seguro de eliminar este curso?')">
@@ -59,7 +64,26 @@ class ListaCursosView {
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Gráfico de Cursos -->
+            <div class="mt-4">
+                <canvas id="graficoCursos"></canvas>
+            </div>
         </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+        const ctx = document.getElementById('graficoCursos');
+        const data = {
+            labels: <?= json_encode(array_column($cursos, 'nombre_curso')) ?>,
+            datasets: [{
+                label: 'Capacidad',
+                data: <?= json_encode(array_column($cursos, 'capacidad')) ?>,
+                backgroundColor: 'rgba(37,99,235,0.7)'
+            }]
+        };
+        new Chart(ctx, { type: 'bar', data: data });
+        </script>
         
         <?php
         include __DIR__ . '/../../includes/footer.php';

@@ -86,5 +86,21 @@ class EntregaModel {
             return false;
         }
     }
+
+    public function obtenerEntregasPorCurso($id_curso) {
+        try {
+            $sql = "SELECT e.*, u.nombre AS estudiante, a.nombre AS actividad
+                    FROM entregas e
+                    JOIN usuarios u ON e.id_estudiante = u.id_usuario
+                    JOIN actividades a ON e.id_actividad = a.id_actividad
+                    WHERE a.id_curso = ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$id_curso]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error al obtener entregas por curso: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>

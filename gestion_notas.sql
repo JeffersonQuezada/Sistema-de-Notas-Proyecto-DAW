@@ -30,7 +30,7 @@ CREATE TABLE `actividades` (
   PRIMARY KEY (`id_actividad`),
   KEY `id_curso` (`id_curso`),
   CONSTRAINT `actividades_ibfk_1` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `actividades` */
 
@@ -55,7 +55,8 @@ insert  into `actividades`(`id_actividad`,`id_curso`,`nombre`,`descripcion`,`fec
 (18,7,'Examen Parcial','Evaluación histórica','2025-06-22 10:00:00','Examen'),
 (19,8,'Análisis Literario','Comentario de texto del Quijote','2025-06-14 23:59:00','Tarea'),
 (20,8,'Examen Final','Evaluación del Siglo de Oro','2025-07-05 10:00:00','Examen'),
-(21,11,'Jhon Wick 5','holajjj','2025-06-18 16:25:00','Examen');
+(24,11,'fgggg','ggggggg','2025-06-20 20:13:00',''),
+(25,13,'Ivestigacion','Investigar la historia de php','2025-06-14 21:36:00','');
 
 /*Table structure for table `asistencias` */
 
@@ -110,7 +111,7 @@ CREATE TABLE `cursos` (
   PRIMARY KEY (`id_curso`),
   KEY `id_docente` (`id_docente`),
   CONSTRAINT `cursos_ibfk_1` FOREIGN KEY (`id_docente`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `cursos` */
 
@@ -125,8 +126,9 @@ insert  into `cursos`(`id_curso`,`nombre_curso`,`descripcion`,`id_docente`,`cont
 (8,'Programación I','Introducción a la programación con Python',7,'prog2025b',35,'B'),
 (9,'Historia Universal','Historia desde la antigüedad hasta el siglo XX',4,'hist2025',40,'A'),
 (10,'Literatura Española','Literatura del Siglo de Oro',5,'lit2025',25,'A'),
-(11,'Ejemplo','emplo para pruebas',20,'$2y$10$BtMipT3wfaMTWQ8dMiBFyucbb12g6pIIX8yZPZO.fydQZ.2Im0XvC',40,NULL),
-(12,'Fisica cuantica','hacer un hola mundo en python',5,'$2y$10$7Sa1l6iVEmi98fkRTwkoB.23i1Cq7N56fFMVssmYVXk1/jaCYka9K',45,'');
+(11,'Ejemplo','emplo para pruebas',10,'$2y$10$BtMipT3wfaMTWQ8dMiBFyucbb12g6pIIX8yZPZO.fydQZ.2Im0XvC',40,''),
+(12,'Fisica cuantica','hacer un hola mundo en python',5,'$2y$10$7Sa1l6iVEmi98fkRTwkoB.23i1Cq7N56fFMVssmYVXk1/jaCYka9K',45,''),
+(13,'Fisica cuantica',NULL,20,'$2y$10$wl0LrZnZ8NtB5ziwWMSZKuNcKAJwWJGlreFEEy7AbTwAUQrwxM1oC',30,'A');
 
 /*Table structure for table `docentes` */
 
@@ -179,7 +181,7 @@ CREATE TABLE `estudiantes_cursos` (
   KEY `id_curso` (`id_curso`),
   CONSTRAINT `estudiantes_cursos_ibfk_1` FOREIGN KEY (`id_estudiante`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
   CONSTRAINT `estudiantes_cursos_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `estudiantes_cursos` */
 
@@ -213,7 +215,8 @@ insert  into `estudiantes_cursos`(`id`,`id_estudiante`,`id_curso`,`grupo`) value
 (27,21,11,NULL),
 (28,21,1,NULL),
 (29,21,9,NULL),
-(30,21,10,NULL);
+(30,21,10,NULL),
+(31,21,13,NULL);
 
 /*Table structure for table `estudiantes_grupos` */
 
@@ -334,13 +337,14 @@ CREATE TABLE `misiones` (
   PRIMARY KEY (`id_mision`),
   KEY `id_grupo` (`id_grupo`),
   CONSTRAINT `misiones_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `grupos` (`id_grupo`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `misiones` */
 
 insert  into `misiones`(`id_mision`,`titulo`,`descripcion`,`recompensa`,`id_grupo`,`fecha_inicio`,`fecha_fin`,`prioridad`) values 
 (1,'Primeros Pasos','Completa tu primer curso','100 puntos',NULL,'2025-06-11 09:57:19',NULL,1),
-(2,'Estrella Naciente','Obtén una calificación de 90+','150 puntos',NULL,'2025-06-11 09:57:19',NULL,1);
+(2,'Estrella Naciente','Obtén una calificación de 90+','150 puntos',NULL,'2025-06-11 09:57:19',NULL,1),
+(3,'Promedio mayor a 70.5','hola','un punto extra para los aumnos',NULL,'2025-06-13 21:22:00','2025-07-11 21:22:00',1);
 
 /*Table structure for table `misiones_estudiantes` */
 
@@ -358,6 +362,11 @@ CREATE TABLE `misiones_estudiantes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `misiones_estudiantes` */
+
+insert  into `misiones_estudiantes`(`id_mision`,`id_usuario`,`completado`,`fecha_aceptacion`) values 
+(3,25,0,NULL),
+(3,26,0,NULL),
+(3,27,0,NULL);
 
 /*Table structure for table `notas` */
 

@@ -160,5 +160,16 @@ class DocenteModel {
             return false;
         }
     }
-}
+
+public function listarGruposPorDocente($id_docente) {
+    try {
+        $sql = "SELECT * FROM grupos WHERE id_docente = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id_docente]);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        error_log("Error al listar grupos por docente: " . $e->getMessage());
+        return false;
+    }
+}}
 ?>

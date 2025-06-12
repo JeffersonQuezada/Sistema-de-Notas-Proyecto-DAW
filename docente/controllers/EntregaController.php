@@ -51,5 +51,10 @@ class EntregaController {
             return false;
         }
     }
+
+    public function listarEntregasPorCurso($id_curso) {
+        $entregas = $this->entregaModel->obtenerEntregasPorCurso($id_curso);
+        include __DIR__ . '/../views/entregas_curso.php';
+    }
 }
 ?>

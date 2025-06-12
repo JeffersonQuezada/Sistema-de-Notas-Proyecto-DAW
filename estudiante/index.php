@@ -101,9 +101,10 @@ switch ($accion) {
         break;
         
     case 'insignias':
-        require_once 'controllers/InsigniaController.php';
-        $controller = new InsigniaController();
-        $controller->mostrarInsignias();
+        require_once __DIR__ . '/models/InsigniaModel.php';
+        $model = new InsigniaModel();
+        $insignias = $model->obtenerPorUsuario($_SESSION['id_usuario']);
+        include __DIR__ . '/views/mis_insignias.php';
         break;
         
     case 'perfil':

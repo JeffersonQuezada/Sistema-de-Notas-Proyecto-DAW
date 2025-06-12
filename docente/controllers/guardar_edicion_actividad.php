@@ -1,7 +1,7 @@
 <?php
 
-require_once '../models/ActividadModel.php';
-require_once '../models/CursoModel.php';
+require_once __DIR__ . '/../models/ActividadModel.php';
+require_once __DIR__ . '/../models/CursoModel.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['id_usuario'])) {
@@ -30,9 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resultado = $actividadModel->editarActividad($id_actividad, $nombre, $descripcion, $fecha_limite, $tipo);
 
     if ($resultado) {
-        header("Location: ../views/actividades_listado.php?success=1&msg=Actividad modificada correctamente");
+        header("Location: ../index.php?accion=actividades&success=1&msg=Actividad modificada correctamente");
     } else {
-        header("Location: ../views/editar_actividad.php?id=$id_actividad&error=1&msg=No se pudo modificar la actividad");
+        header("Location: ../index.php?accion=editar_actividad&id=$id_actividad&error=1&msg=No se pudo modificar la actividad");
     }
     exit();
 } else {

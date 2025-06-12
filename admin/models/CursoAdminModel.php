@@ -19,12 +19,10 @@ class CursoAdminModel {
     }
     
     public function obtenerPorId($id) {
-        $stmt = $this->pdo->prepare("
-            SELECT * FROM cursos 
-            WHERE id_curso = ?
-        ");
+        $sql = "SELECT * FROM cursos WHERE id_curso = ?";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
     public function obtenerDocentes() {
@@ -58,36 +56,41 @@ class CursoAdminModel {
         }
     }
     
+    public function crearCurso($datos) {
+        // Encriptar la contraseña antes de guardar
+        $contrasenaHash = password_hash($datos['contrasena'], PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO cursos (nombre_curso, id_docente, capacidad, grupo, contrasena) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            $datos['nombre_curso'],
+            $datos['id_docente'],
+            $datos['capacidad'],
+            $datos['grupo'],
+            $contrasenaHash
+        ]);
+    }
+    
     public function actualizar($id, $datos) {
-        try {
-            $sql = "UPDATE cursos SET 
-                nombre_curso = ?, 
-                descripcion = ?, 
-                id_docente = ?, 
-                capacidad = ?, 
-                grupo = ?";
-            
-            $params = [
-                $datos['nombre_curso'],
-                $datos['descripcion'],
-                $datos['id_docente'],
-                $datos['capacidad'],
-                $datos['grupo'] ?? null
-            ];
-            
-            if (!empty($datos['contrasena'])) {
-                $sql .= ", contrasena = ?";
-                $params[] = password_hash($datos['contrasena'], PASSWORD_DEFAULT);
-            }
-            
-            $sql .= " WHERE id_curso = ?";
-            $params[] = $id;
-            
-            $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute($params);
-        } catch (PDOException $e) {
-            return false;
+        $params = [
+            $datos['nombre_curso'],
+            $datos['id_docente'],
+            $datos['capacidad'],
+            $datos['grupo']
+        ];
+
+        $sql = "UPDATE cursos SET nombre_curso = ?, id_docente = ?, capacidad = ?, grupo = ?";
+
+        if (!empty($datos['contrasena'])) {
+            $sql .= ", contrasena = ?";
+            $params[] = password_hash($datos['contrasena'], PASSWORD_DEFAULT);
         }
+
+        $sql .= " WHERE id_curso = ?";
+        $params[] = $id;
+
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
     }
     
     public function eliminar($id) {
@@ -100,5 +103,17 @@ class CursoAdminModel {
             }
             return false;
         }
+    }
+    
+    public function buscar($busqueda) {
+        $sql = "SELECT c.*, u.nombre as nombre_docente 
+                FROM cursos c
+                JOIN usuarios u ON c.id_docente = u.id_usuario
+                WHERE c.nombre_curso LIKE ? OR u.nombre LIKE ?
+                ORDER BY c.nombre_curso";
+        $stmt = $this->pdo->prepare($sql);
+        $like = "%$busqueda%";
+        $stmt->execute([$like, $like]);
+        return $stmt->fetchAll();
     }
 }

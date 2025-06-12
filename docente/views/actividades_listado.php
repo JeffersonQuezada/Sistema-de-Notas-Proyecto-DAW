@@ -47,7 +47,7 @@ if (isset($_GET['error'])) {
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0"><i class="fas fa-tasks me-2"></i>Mis Actividades</h2>
-        <a href="nueva_actividad.php" class="btn btn-success">
+        <a href="index.php?accion=nueva_actividad" class="btn btn-success">
             <i class="fas fa-plus me-1"></i> Nueva Actividad
         </a>
     </div>
@@ -104,9 +104,9 @@ if (isset($_GET['error'])) {
                                                 <span class="badge bg-secondary"><i class="fas fa-calendar-alt me-1"></i> <?= date('d/m/Y H:i', strtotime($actividad['fecha_limite'])) ?></span>
                                             </div>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <a href="editar_actividad.php?id=<?= $actividad['id_actividad'] ?>" class="btn btn-outline-primary" title="Editar"><i class="fas fa-edit"></i></a>
-                                                <a href="ver_actividad.php?id=<?= $actividad['id_actividad'] ?>" class="btn btn-outline-info" title="Ver"><i class="fas fa-eye"></i></a>
-                                                <form action="../controllers/eliminar_actividad.php" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar esta actividad?');">
+                                                <a href="index.php?accion=editar_actividad&id=<?= $actividad['id_actividad'] ?>" class="btn btn-outline-primary" title="Editar"><i class="fas fa-edit"></i></a>
+                                                <a href="index.php?accion=ver_actividad&id=<?= $actividad['id_actividad'] ?>" class="btn btn-outline-info" title="Ver"><i class="fas fa-eye"></i></a>
+                                                <form action="index.php?accion=eliminar_actividad" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar esta actividad?');">
                                                     <input type="hidden" name="id_actividad" value="<?= $actividad['id_actividad'] ?>">
                                                     <button type="submit" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></button>
                                                 </form>
